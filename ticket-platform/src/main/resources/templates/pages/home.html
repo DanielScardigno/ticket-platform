@@ -1,0 +1,26 @@
+<!DOCTYPE html>
+<html lang="en" xmlns="https://www.thymeleaf.org">
+
+<head th:replace="~{fragments/head :: head(Home)}"></head>
+
+<body class="bg-dark">
+    <header>
+        <nav th:replace="~{fragments/navBar :: navBar}"></nav>
+    </header>
+
+    <main>
+        <div class="container text-center mt-5 text-light">
+            <h1>Welcome!</h1>
+
+            <div class="row">
+                <div class="col-12 d-flex justify-content-center">
+                    <a class="btn btn-lg btn-light mt-3 fw-medium" th:href="@{/tickets}">Go to Tickets</a>
+                </div>
+            </div>
+        </div>
+    </main>
+
+    <script th:replace="~{fragments/popper :: popper}"></script>
+</body>
+
+</html>
