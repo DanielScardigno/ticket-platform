@@ -1,0 +1,60 @@
+<!DOCTYPE html>
+<html lang="en" xmlns="https://www.thymeleaf.org">
+
+<head th:replace="~{fragments/head :: head('New Ticket')}"></head>
+
+<body class="bg-dark">
+    <header>
+        <nav th:replace="~{fragments/navBar :: navBar}"></nav>
+    </header>
+
+    <main>
+        <div class="container">
+
+            <!-- Title -->
+            <h1 class="text-light text-center mt-5"><i class="bi bi-ticket-fill"></i> New Ticket +</h1>
+            <!-- End Title -->
+
+            <!-- Form -->
+            <form class="col-lg-6 col-md-8 col-10 mx-auto" th:action="@{/tickets/create}" method="post" th:object="${ticket}">
+
+                <!-- Ticket Title -->
+                <label class="form-label text-light mt-5 fs-3" for="title">Title</label>
+                <input class="form-control" type="text" id="title" th:field="*{title}" placeholder="Insert Title" th:errorClass="is-invalid">
+
+                <!-- Error -->
+                <div th:if="${#fields.hasErrors('title')}" class="invalid-feedback fs-5">
+                    <ul>
+                        <li th:each="err : ${#fields.errors('title')}">[[${err}]]</li>
+                    </ul>
+                </div>
+                <!-- End Error -->
+                <!-- End Ticket Title -->
+
+                <!-- Ticket Body -->
+                <label class="form-label text-light mt-5 fs-3" for="body">Body</label>
+                <textarea class="form-control" type="text" id="body" th:field="*{body}" rows="4" placeholder="Insert Body" th:errorClass="is-invalid"></textarea>
+
+                <!-- Error -->
+                <div th:if="${#fields.hasErrors('body')}" class="invalid-feedback fs-5">
+                    <ul>
+                        <li th:each="err : ${#fields.errors('body')}">[[${err}]]</li>
+                    </ul>
+                </div>
+                <!-- End Error -->
+                <!-- End Ticket body -->
+
+                <div class="d-flex justify-content-between mt-5">
+                    <a class="btn btn-danger" th:href="@{/tickets}">Cancel</a>
+                    <button class="btn btn-success" type="submit">Add Ticket +</button>
+                </div>
+
+            </form>
+            <!-- End Form -->
+    </main>
+
+    <!-- Popper -->
+    <script th:replace="~{fragments/popper :: popper}"></script>
+</body>
+
+</html>
