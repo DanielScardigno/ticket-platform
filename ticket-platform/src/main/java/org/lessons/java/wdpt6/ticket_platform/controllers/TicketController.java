@@ -1,5 +1,6 @@
 package org.lessons.java.wdpt6.ticket_platform.controllers;
 
+import java.util.List;
 import java.util.Optional;
 
 import org.lessons.java.wdpt6.ticket_platform.Models.Ticket;
@@ -14,7 +15,9 @@ import org.springframework.web.bind.annotation.ModelAttribute;
 import org.springframework.web.bind.annotation.PathVariable;
 import org.springframework.web.bind.annotation.PostMapping;
 import org.springframework.web.bind.annotation.RequestMapping;
+import org.springframework.web.bind.annotation.RequestParam;
 import org.springframework.web.server.ResponseStatusException;
+
 
 import jakarta.validation.Valid;
 
@@ -26,9 +29,18 @@ public class TicketController {
     TicketRepo ticketRepo;
 
     @GetMapping
-    public String index(Model model) {
+    public String index(Model model, @RequestParam(name = "keyword", required = false) String keyword) {
+
+        List<Ticket> tickets;
+
+        if (keyword == null || keyword.isEmpty()) {
+            tickets = ticketRepo.findAll();
+        } else {
+            tickets = ticketRepo.findByTitleContainingIgnoreCase(keyword);
+        }
         
-        model.addAttribute("tickets", ticketRepo.findAll());
+        model.addAttribute("tickets", tickets);
+        model.addAttribute("keyword", keyword);
 
         return "tickets/index";
     }
@@ -37,15 +49,14 @@ public class TicketController {
     @GetMapping("/{id}")
     public String view(Model model, @PathVariable Integer id) {
         
-        Optional<Ticket> tickeOptional = ticketRepo.findById(id);
+        Optional<Ticket> ticketOptional = ticketRepo.findById(id);
         
-        if (tickeOptional.isPresent()) {
-            model.addAttribute("ticket", tickeOptional.get());   
+        if (ticketOptional.isPresent()) {
+            model.addAttribute("ticket", ticketOptional.get());   
+            return "tickets/show";
         } else {
             throw new ResponseStatusException(HttpStatus.NOT_FOUND, "There's no ticket with id: " + id);
         }
-        
-        return "tickets/show";
     }
 
     @GetMapping("/create")
@@ -65,5 +76,38 @@ public class TicketController {
             ticketRepo.save(formTicket);
             return "redirect:/tickets";
         }
+    }
+
+    @GetMapping("/{id}/edit")
+    public String edit(Model model, @PathVariable Integer id) {
+
+        Optional<Ticket> ticketOptional = ticketRepo.findById(id);
+        
+        if (ticketOptional.isPresent()) {
+            model.addAttribute("ticket", ticketOptional.get());   
+            return "tickets/edit";
+        } else {
+            throw new ResponseStatusException(HttpStatus.NOT_FOUND, "There's no ticket with id: " + id);
+        }
+    }
+
+    @PostMapping("/{id}/edit")
+    public String update(Model model, @Valid @ModelAttribute("Ticket") Ticket formTicket, BindingResult bindingResult) {
+
+        if (bindingResult.hasErrors()) {
+            return "tickets/edit";
+        } else {
+            ticketRepo.save(formTicket);
+            return "redirect:/tickets";
+        }
+    }
+
+    @PostMapping("/{id}/delete")
+    public String delete(Model model, @PathVariable Integer id) {
+
+        Ticket ticketToDelete = ticketRepo.findById(id).get();
+
+        ticketRepo.delete(ticketToDelete);
+        return "redirect:/tickets";
     }
 }

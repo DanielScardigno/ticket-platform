@@ -17,9 +17,23 @@
 
             <div class="col-lg-6 col-md-8 col-10 mt-5 mx-auto">
 
-                <!-- Add Ticket -->
-                <a th:href="@{tickets/create}" class="btn btn-light mb-3">Add Ticket +</a>
-                <!-- End Add Ticket -->
+                <div class="row justify-content-between">
+
+                    <!-- Add Ticket -->
+                     <div class="col-12 col-md-7 mb-3">
+                         <a th:href="@{tickets/create}" class="btn btn-light">Add Ticket +</a>
+                     </div>
+                    <!-- End Add Ticket -->
+
+                    <!-- Search Ticket -->
+                    <form th:action="@{/tickets}" method="get" class="col-12 col-md-5">
+                        <div class="input-group">
+                            <input type="search" name="keyword" id="ticket-search-input" class="form-control" th:value="${keyword}" placeholder="Search">
+                            <button class="btn btn-light" type="submit"><i class="bi bi-search"></i></button>
+                        </div>
+                    </form>
+                    <!-- End Search Ticket -->
+                </div>
 
                 <!-- Tickets Table -->
                 <table class="table table-dark" th:if="${tickets.size() > 0}">
@@ -34,10 +48,44 @@
                         <tr th:each="ticket : ${tickets}" th:object="${ticket}">
                             <td>[[*{title}]]</td>
                             <td>[[*{creationDate}]]</td>
-                            <td class="text-end">
+                            <td class="d-flex justify-content-end gap-1">
+
+                                <!-- Ticket Details -->
                                 <a th:href="@{|/tickets/*{id}|}" class="btn btn-sm btn-light"><i class="bi bi-eye-fill"></i></a>
+
+                                <!-- Edit Ticket -->
                                 <a th:href="@{|/tickets/*{id}/edit|}" class="btn btn-sm btn-primary"><i class="bi bi-pencil"></i></a>
-                                <a th:href="@{|/tickets/*{id}/delete|}" class="btn btn-sm btn-danger"><i class="bi bi-trash"></i></a>
+
+                                <!-- Delete Ticket -->
+                                <button type="button" class="btn btn-sm btn-danger" data-bs-toggle="modal" th:data-bs-target="'#delete-modal-' + *{id}">
+                                    <i class="bi bi-trash"></i>
+                                </button>
+
+                                <!-- Modal -->
+                                <div class="modal fade" th:id="'delete-modal-' + *{id}" data-bs-backdrop="static"
+                                    data-bs-theme="dark" data-bs-keyboard="false" tabindex="-1"
+                                    aria-labelledby="staticBackdropLabel" aria-hidden="true">
+                                    <div class="modal-dialog">
+                                        <div class="modal-content">
+                                            <div class="modal-header">
+                                                <h1 class="modal-title text-danger fs-5" id="staticBackdropLabel">
+                                                    Delete Ticket</h1>
+                                                <button type="button" class="btn-close" data-bs-dismiss="modal"
+                                                    aria-label="Close"></button>
+                                            </div>
+                                            <div class="modal-body me-auto">
+                                                Are you sure you want to delete ticket: "[[*{title}]]"?
+                                            </div>
+                                            <div class="modal-footer">
+                                                <button type="button" class="btn btn-light"
+                                                    data-bs-dismiss="modal">Cancel</button>
+                                                <form th:action="@{|/tickets/*{id}/delete|}" method="post">
+                                                    <button type="submit" class="btn btn-danger">Delete</i></button>
+                                                </form>
+                                            </div>
+                                        </div>
+                                    </div>
+                                </div>
                             </td>
                         </tr>
                     </tbody>
@@ -49,7 +97,7 @@
 
             <!-- No Tickets Text -->
             <div class="text-danger text-center mt-5 " th:unless="${tickets.size() > 0}">
-                <h2>Oops, there's no tickets at the moment</h2>
+                <h2>Oops, there's no tickets here</h2>
                 <h2>>:(</h2>
             </div>
             <!-- End No Tickets Text -->
