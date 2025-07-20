@@ -20,7 +20,7 @@
 
                 <!-- Ticket Title -->
                 <label class="form-label text-light mt-5 fs-3" for="title">Title</label>
-                <input class="form-control" type="text" id="title" th:field="*{title}" placeholder="Insert Title" th:errorClass="is-invalid">
+                <input class="form-control" type="text" id="title" th:field="*{title}" placeholder="Insert Title" th:errorClass="is-invalid" required>
 
                 <!-- Error -->
                 <div th:if="${#fields.hasErrors('title')}" class="invalid-feedback fs-5">
@@ -33,7 +33,7 @@
 
                 <!-- Ticket Body -->
                 <label class="form-label text-light mt-5 fs-3" for="body">Body</label>
-                <textarea class="form-control" type="text" id="body" th:field="*{body}" rows="4" placeholder="Insert Body" th:errorClass="is-invalid"></textarea>
+                <textarea class="form-control" type="text" id="body" th:field="*{body}" rows="4" placeholder="Insert Body" th:errorClass="is-invalid" required></textarea>
 
                 <!-- Error -->
                 <div th:if="${#fields.hasErrors('body')}" class="invalid-feedback fs-5">

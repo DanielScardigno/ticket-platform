@@ -92,7 +92,7 @@ public class TicketController {
     }
 
     @PostMapping("/{id}/edit")
-    public String update(Model model, @Valid @ModelAttribute("Ticket") Ticket formTicket, BindingResult bindingResult) {
+    public String update(Model model, @Valid @ModelAttribute("ticket") Ticket formTicket, BindingResult bindingResult) {
 
         if (bindingResult.hasErrors()) {
             return "tickets/edit";
