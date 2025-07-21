@@ -9,6 +9,7 @@ import jakarta.persistence.Id;
 import jakarta.persistence.Lob;
 import jakarta.persistence.Table;
 import jakarta.validation.constraints.NotBlank;
+import jakarta.validation.constraints.Size;
 
 
 @Entity
@@ -20,6 +21,7 @@ public class Ticket {
     private Integer id;
 
     @NotBlank(message = "Title cannot be empty or contain only spaces")
+    @Size(max = 30, message = "Title cannot be longer than 30 characters")
     private String title;
 
     @Lob
@@ -28,7 +30,7 @@ public class Ticket {
 
     private LocalDate creationDate = LocalDate.now();
 
-    // Getter e Setter
+    // Getters and Setters
 
     public Integer getId() {
         return this.id;

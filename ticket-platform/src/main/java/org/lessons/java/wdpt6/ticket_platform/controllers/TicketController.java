@@ -29,7 +29,7 @@ public class TicketController {
     TicketRepo ticketRepo;
 
     @GetMapping
-    public String index(Model model, @RequestParam(name = "keyword", required = false) String keyword) {
+    public String index(Model model, @RequestParam(required = false) String keyword) {
 
         List<Ticket> tickets;
 

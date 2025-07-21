@@ -1,0 +1,54 @@
+<!DOCTYPE html>
+<html lang="en" xmlns="https://www.thymeleaf.org">
+
+<head th:replace="~{fragments/head :: head('User Details')}"></head>
+
+<body class="bg-dark">
+    <header>
+        <nav th:replace="~{fragments/navBar :: navBar}"></nav>
+    </header>
+
+    <main>
+        <div class="container">
+
+            <!-- Title -->
+            <h1 class="text-light text-center mt-5"><i class="bi bi-person-lines-fill"></i> User Details</h1>
+            <!-- End Title -->
+
+            <div class="row justify-content-center">
+                <div class="col-12 col-md-8">
+                    <!-- Ticket Card -->
+                    <div class="card mt-5 col-12 col-lg-4 text-bg-dark border-light" th:object="${user}">
+                        <div class="card-body">
+
+                            <img th:src="*{imgUrl}" class="card-img-top">
+                            
+                            <div class="text-light fs-4 fw-medium mt-2">UserName: [[*{userName}]]</div>
+
+                            <div class="text-light mt-2 fs-6 fw-medium">
+                                Roles: <span th:each="role : *{roles}">[[${role.name}]] </span>
+                            </div>
+
+                            <div class="text-light fs-6">
+                                Password: [[*{password}]]</span>
+                            </div>
+
+
+                            <div class="mt-5 d-flex justify-content-between">
+                                <a th:href="@{/users}" class="btn btn-danger">Go Back</a>
+                                <a th:href="@{|/users/*{id}/edit|}" class="btn btn-primary"><i class="bi bi-pencil"></i></a>
+                            </div>
+                        </div>
+                    </div>
+                    <!-- End Ticket Card -->
+                </div>
+            </div>
+
+        </div>
+    </main>
+
+    <!-- Popper -->
+    <script th:replace="~{fragments/popper :: popper}"></script>
+</body>
+
+</html>
