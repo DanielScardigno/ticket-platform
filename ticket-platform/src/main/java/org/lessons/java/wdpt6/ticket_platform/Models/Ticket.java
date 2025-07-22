@@ -2,13 +2,18 @@ package org.lessons.java.wdpt6.ticket_platform.Models;
 
 import java.time.LocalDate;
 
+import com.fasterxml.jackson.annotation.JsonBackReference;
+
 import jakarta.persistence.Entity;
 import jakarta.persistence.GeneratedValue;
 import jakarta.persistence.GenerationType;
 import jakarta.persistence.Id;
+import jakarta.persistence.JoinColumn;
 import jakarta.persistence.Lob;
+import jakarta.persistence.ManyToOne;
 import jakarta.persistence.Table;
 import jakarta.validation.constraints.NotBlank;
+import jakarta.validation.constraints.NotNull;
 import jakarta.validation.constraints.Size;
 
 
@@ -29,6 +34,12 @@ public class Ticket {
     private String body;
 
     private LocalDate creationDate = LocalDate.now();
+
+    @ManyToOne
+    @JoinColumn(name = "user_id")
+    @NotNull(message = "You must select an operator")
+    @JsonBackReference
+    private User user;
 
     // Getters and Setters
 
@@ -58,5 +69,14 @@ public class Ticket {
 
     public LocalDate getCreationDate() {
         return this.creationDate;
+    }
+
+    
+    public User getUser() {
+        return this.user;
+    }
+
+    public void setUser(User user) {
+        this.user = user;
     }
 }

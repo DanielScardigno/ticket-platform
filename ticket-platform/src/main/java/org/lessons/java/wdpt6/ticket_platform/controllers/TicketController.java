@@ -5,6 +5,7 @@ import java.util.Optional;
 
 import org.lessons.java.wdpt6.ticket_platform.Models.Ticket;
 import org.lessons.java.wdpt6.ticket_platform.repositories.TicketRepo;
+import org.lessons.java.wdpt6.ticket_platform.repositories.UserRepo;
 import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.http.HttpStatus;
 import org.springframework.stereotype.Controller;
@@ -27,6 +28,9 @@ public class TicketController {
     
     @Autowired
     TicketRepo ticketRepo;
+
+    @Autowired
+    UserRepo userRepo;
 
     @GetMapping
     public String index(Model model, @RequestParam(required = false) String keyword) {
@@ -62,6 +66,7 @@ public class TicketController {
     @GetMapping("/create")
     public String create(Model model) {
     
+        model.addAttribute("users", userRepo.findAll());
         model.addAttribute("ticket", new Ticket());
     
         return "tickets/create";
@@ -69,6 +74,8 @@ public class TicketController {
     
     @PostMapping("/create")
     public String store(Model model, @Valid @ModelAttribute("ticket") Ticket formTicket, BindingResult bindingResult) {
+
+        model.addAttribute("users", userRepo.findAll());
     
         if (bindingResult.hasErrors()) {
             return "tickets/create";
@@ -80,6 +87,8 @@ public class TicketController {
 
     @GetMapping("/{id}/edit")
     public String edit(Model model, @PathVariable Integer id) {
+
+        model.addAttribute("users", userRepo.findAll());
 
         Optional<Ticket> ticketOptional = ticketRepo.findById(id);
         
@@ -94,6 +103,8 @@ public class TicketController {
     @PostMapping("/{id}/edit")
     public String update(Model model, @Valid @ModelAttribute("ticket") Ticket formTicket, BindingResult bindingResult) {
 
+        model.addAttribute("users", userRepo.findAll());
+        
         if (bindingResult.hasErrors()) {
             return "tickets/edit";
         } else {

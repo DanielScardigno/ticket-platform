@@ -11,6 +11,7 @@ import jakarta.persistence.JoinColumn;
 import jakarta.persistence.JoinTable;
 import jakarta.persistence.Lob;
 import jakarta.persistence.ManyToMany;
+import jakarta.persistence.OneToMany;
 import jakarta.persistence.Table;
 import jakarta.validation.constraints.NotBlank;
 import jakarta.validation.constraints.Size;
@@ -40,6 +41,9 @@ public class User {
         inverseJoinColumns = @JoinColumn(name = "role_id"))
     @Size(min = 1, message = "You must select at least 1 role")
     private List<Role> roles;
+
+    @OneToMany(mappedBy = "user")
+    private List<Ticket> tickets;
 
     // Getters and Setters
 
@@ -81,5 +85,13 @@ public class User {
 
     public void setRoles(List<Role> roles) {
         this.roles = roles;
+    }
+    
+    public List<Ticket> getTickets() {
+        return this.tickets;
+    }
+
+    public void setTickets(List<Ticket> tickets) {
+        this.tickets = tickets;
     }
 }

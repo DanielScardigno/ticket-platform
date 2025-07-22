@@ -20,7 +20,8 @@
 
                 <!-- Ticket Title -->
                 <label class="form-label text-light mt-5 fs-3" for="title">Title</label>
-                <input class="form-control" type="text" id="title" th:field="*{title}" placeholder="Insert Title" th:errorClass="is-invalid" required>
+                <input class="form-control" type="text" id="title" th:field="*{title}" placeholder="Insert Title"
+                    th:errorClass="is-invalid" required>
 
                 <!-- Error -->
                 <div th:if="${#fields.hasErrors('title')}" class="invalid-feedback fs-5">
@@ -33,7 +34,8 @@
 
                 <!-- Ticket Body -->
                 <label class="form-label text-light mt-5 fs-3" for="body">Body</label>
-                <textarea class="form-control" type="text" id="body" th:field="*{body}" rows="4" placeholder="Insert Body" th:errorClass="is-invalid" required></textarea>
+                <textarea class="form-control" type="text" id="body" th:field="*{body}" rows="4"
+                    placeholder="Insert Body" th:errorClass="is-invalid" required></textarea>
 
                 <!-- Error -->
                 <div th:if="${#fields.hasErrors('body')}" class="invalid-feedback fs-5">
@@ -44,7 +46,23 @@
                 <!-- End Error -->
                 <!-- End Ticket body -->
 
-                <div class="d-flex justify-content-between mt-5">
+                <!-- Operator -->
+                <label class="form-label text-light mt-5 fs-3" for="operator">Operator</label>
+                <select class="form-select" id="operator" th:field="*{user}" th:errorClass="is-invalid">
+                    <option value="" >Select an Operator</option>
+                    <option th:each="user : ${users}" th:value="${user.id}">[[${user.userName}]]</option>
+                </select>
+
+                <!-- Error -->
+                <div th:if="${#fields.hasErrors('user')}" class="invalid-feedback fs-5">
+                    <ul>
+                        <li th:each="err : ${#fields.errors('user')}">[[${err}]]</li>
+                    </ul>
+                </div>
+                <!-- End Error -->
+                <!-- End Operator -->
+
+                <div class="d-flex justify-content-between my-5">
                     <a class="btn btn-danger" th:href="@{/tickets}">Cancel</a>
                     <button class="btn btn-success" type="submit">Add Ticket +</button>
                 </div>
