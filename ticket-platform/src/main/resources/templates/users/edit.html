@@ -1,0 +1,92 @@
+<!DOCTYPE html>
+<html lang="en" xmlns="https://www.thymeleaf.org">
+
+<head th:replace="~{fragments/head :: head('Edit User')}"></head>
+
+<body class="bg-dark">
+    <header>
+        <nav th:replace="~{fragments/navBar :: navBar}"></nav>
+    </header>
+
+    <main>
+        <div class="container">
+
+            <!-- Title -->
+            <h1 class="text-light text-center mt-5"><i class="bi bi-person-fill-gear"></i> Edit User +</h1>
+            <!-- End Title -->
+
+            <!-- Form -->
+            <form class="col-lg-6 col-md-8 col-10 mx-auto" th:action="@{|/users/*{id}/edit|}" method="post" th:object="${user}">
+
+                <!-- Username -->
+                <label class="form-label text-light mt-5 fs-3" for="username">Username</label>
+                <input class="form-control" type="text" id="username" th:field="*{userName}" placeholder="Insert Username" th:errorClass="is-invalid" required>
+
+                <!-- Error -->
+                <div th:if="${#fields.hasErrors('userName')}" class="invalid-feedback fs-5">
+                    <ul>
+                        <li th:each="err : ${#fields.errors('userName')}">[[${err}]]</li>
+                    </ul>
+                </div>
+                <!-- End Error -->
+                <!-- End Username -->
+
+                <!-- Password -->
+                <label class="form-label text-light mt-5 fs-3" for="password">Password</label>
+                <input class="form-control" type="text" id="password" th:field="*{password}" placeholder="Insert Password" th:errorClass="is-invalid" required>
+
+                <!-- Error -->
+                <div th:if="${#fields.hasErrors('password')}" class="invalid-feedback fs-5">
+                    <ul>
+                        <li th:each="err : ${#fields.errors('password')}">[[${err}]]</li>
+                    </ul>
+                </div>
+                <!-- End Error -->
+                <!-- End Password -->
+
+                <!-- Roles -->
+                <div class="fs-3 mt-5 mb-2 text-light">Roles</div>
+
+                <div>
+                    <div th:each="role : ${roles}" class="me-3">
+                        <input class="form-check-input" type="checkbox" id="'role-' + ${role.id}" th:field="*{roles}" th:value="${role.id}" th:errorClass="is-invalid">
+                        <label class="form-label text-light" for="'role-' + ${role.id}">[[${role.name}]]</label>
+
+                        <!-- Error -->
+                        <div th:if="${#fields.hasErrors('roles')}" class="invalid-feedback fs-5">
+                            <ul>
+                                <li th:each="err : ${#fields.errors('roles')}">[[${err}]]</li>
+                            </ul>
+                        </div>
+                        <!-- End Error -->
+                    </div>
+                </div>
+                <!-- End Roles -->
+
+                <!-- Image -->
+                <label class="form-label text-light fs-3 mt-4" for="image">Image</label>
+                <input class="form-control" type="text" id="image" th:field="*{imgUrl}" placeholder="Insert Url" th:errorClass="is-invalid">
+
+                <!-- Error -->
+                <div th:if="${#fields.hasErrors('imgUrl')}" class="invalid-feedback fs-5">
+                    <ul>
+                        <li th:each="err : ${#fields.errors('imgUrl')}">[[${err}]]</li>
+                    </ul>
+                </div>
+                <!-- End Error -->
+                <!-- End Image -->
+                
+                <div class="d-flex justify-content-between my-5">
+                    <a class="btn btn-danger" th:href="@{/users}">Cancel</a>
+                    <button class="btn btn-success" type="submit">Edit User +</button>
+                </div>
+
+            </form>
+            <!-- End Form -->
+    </main>
+
+    <!-- Popper -->
+    <script th:replace="~{fragments/popper :: popper}"></script>
+</body>
+
+</html>

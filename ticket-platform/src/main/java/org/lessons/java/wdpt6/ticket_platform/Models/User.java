@@ -31,13 +31,14 @@ public class User {
     private String password;
 
     @Lob
-    private String imgUrl;
+    private String imgUrl = "https://t3.ftcdn.net/jpg/05/53/79/60/360_F_553796090_XHrE6R9jwmBJUMo9HKl41hyHJ5gqt9oz.jpg";
     
     @ManyToMany(fetch = FetchType.EAGER)
     @JoinTable(
         name = "role_user",
         joinColumns = @JoinColumn(name = "user_id"),
         inverseJoinColumns = @JoinColumn(name = "role_id"))
+    @Size(min = 1, message = "You must select at least 1 role")
     private List<Role> roles;
 
     // Getters and Setters
@@ -54,7 +55,7 @@ public class User {
         return this.userName;
     }
 
-    public void setUsername(String userName) {
+    public void setUserName(String userName) {
         this.userName = userName;
     }
     
