@@ -97,7 +97,7 @@ public class TicketController {
     @GetMapping("/{id}/edit")
     public String edit(Model model, @PathVariable Integer id) {
 
-        model.addAttribute("users", userRepo.findAll());
+        model.addAttribute("users", userRepo.findByRolesName("OPERATOR"));
         model.addAttribute("ticketStatuses", ticketStatusRepo.findAll());
 
         Optional<Ticket> ticketOptional = ticketRepo.findById(id);
@@ -113,7 +113,7 @@ public class TicketController {
     @PostMapping("/{id}/edit")
     public String update(Model model, @Valid @ModelAttribute("ticket") Ticket formTicket, BindingResult bindingResult) {
 
-        model.addAttribute("users", userRepo.findAll());
+        model.addAttribute("users", userRepo.findByRolesName("OPERATOR"));
         model.addAttribute("ticketStatuses", ticketStatusRepo.findAll());
         
         if (bindingResult.hasErrors()) {
