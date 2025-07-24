@@ -73,11 +73,7 @@ public class TicketController {
     
         model.addAttribute("users", userRepo.findByRolesName("OPERATOR"));
 
-        Ticket newTicket = new Ticket();
-        model.addAttribute("ticket", newTicket);
-    
-        TicketStatus defaulTicketStatus = ticketStatusRepo.findByName("TO DO");
-        newTicket.setTicketStatus(defaulTicketStatus);
+        model.addAttribute("ticket", new Ticket());
 
         return "tickets/create";
     }
