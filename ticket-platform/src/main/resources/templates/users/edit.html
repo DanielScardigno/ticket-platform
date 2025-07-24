@@ -16,7 +16,7 @@
             <!-- End Title -->
 
             <!-- Form -->
-            <form class="col-lg-6 col-md-8 col-10 mx-auto" th:action="@{|/users/*{id}/edit|}" method="post" th:object="${user}">
+            <form class="col-12 col-md-8 col-lg-6 mx-auto" th:action="@{|/users/*{id}/edit|}" method="post" th:object="${user}">
 
                 <!-- Username -->
                 <label class="form-label text-light mt-5 fs-3" for="username">Username</label>
@@ -62,19 +62,6 @@
                     </div>
                 </div>
                 <!-- End Roles -->
-
-                <!-- Image -->
-                <label class="form-label text-light fs-3 mt-4" for="image">Image</label>
-                <input class="form-control" type="text" id="image" th:field="*{imgUrl}" placeholder="Insert Url" th:errorClass="is-invalid">
-
-                <!-- Error -->
-                <div th:if="${#fields.hasErrors('imgUrl')}" class="invalid-feedback fs-5">
-                    <ul>
-                        <li th:each="err : ${#fields.errors('imgUrl')}">[[${err}]]</li>
-                    </ul>
-                </div>
-                <!-- End Error -->
-                <!-- End Image -->
                 
                 <div class="d-flex justify-content-between my-5">
                     <a class="btn btn-danger" th:href="@{/users}">Cancel</a>

@@ -16,7 +16,7 @@
             <!-- End Title -->
 
             <!-- Form -->
-            <form class="col-lg-6 col-md-8 col-10 mx-auto" th:action="@{|/tickets/*{id}/edit|}" method="post" th:object="${ticket}">
+            <form class="col-12 col-md-8 col-lg-6 mx-auto" th:action="@{|/tickets/*{id}/edit|}" method="post" th:object="${ticket}">
 
                 <!-- Ticket Title -->
                 <label class="form-label text-light mt-5 fs-3" for="title">Title</label>
@@ -59,6 +59,13 @@
                 </div>
                 <!-- End Error -->
                 <!-- End Operator -->
+
+                <!-- Ticket Status -->
+                <label class="form-label text-light mt-5 fs-3" for="ticket-status">Status</label>
+                <select class="form-select" id="ticket-status" th:field="*{ticketStatus}" th:errorClass="is-invalid">
+                    <option th:each="ticketStatus : ${ticketStatuses}" th:value="${ticketStatus.id}">[[${ticketStatus.name}]]</option>
+                </select>
+                <!-- End Ticket Status -->
 
                 <div class="d-flex justify-content-between my-5">
                     <a class="btn btn-danger" th:href="@{/tickets}">Cancel</a>

@@ -9,7 +9,6 @@ import jakarta.persistence.GenerationType;
 import jakarta.persistence.Id;
 import jakarta.persistence.JoinColumn;
 import jakarta.persistence.JoinTable;
-import jakarta.persistence.Lob;
 import jakarta.persistence.ManyToMany;
 import jakarta.persistence.OneToMany;
 import jakarta.persistence.Table;
@@ -31,9 +30,6 @@ public class User {
     @NotBlank(message = "password cannot be empty or contain only spaces")
     private String password;
 
-    @Lob
-    private String imgUrl = "https://t3.ftcdn.net/jpg/05/53/79/60/360_F_553796090_XHrE6R9jwmBJUMo9HKl41hyHJ5gqt9oz.jpg";
-    
     @ManyToMany(fetch = FetchType.EAGER)
     @JoinTable(
         name = "role_user",
@@ -69,14 +65,6 @@ public class User {
 
     public void setPassword(String password) {
         this.password = password;
-    }
-    
-    public String getImgUrl() {
-        return this.imgUrl;
-    }
-
-    public void setImgUrl(String imgUrl) {
-        this.imgUrl = imgUrl;
     }
     
     public List<Role> getRoles() {

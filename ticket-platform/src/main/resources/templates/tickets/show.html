@@ -16,15 +16,24 @@
             <!-- End Title -->
 
             <!-- Ticket Card -->
-            <div class="card my-5 mx-auto col-12 col-md-6 text-bg-dark border-light" th:object="${ticket}">
+            <div class="card my-5 mx-auto col-12 col-md-8 col-lg-6 text-bg-dark border-light" th:object="${ticket}">
                 <div class="card-body">
-                    <div class="d-flex justify-content-between">
-                        <span class="text-light fs-4 fw-medium">Title: [[*{title}]]</span>
-                        <span class="text-secondary mt-2">Creation Date: [[*{creationDate}]]</span>
+                    <span class="text-secondary mt-2">Creation Date: [[*{creationDate}]]</span>
+                    <h5 class=" card-title mt-4">Title</h5>
+                    <div class="card card-body text-dark mt-3">
+                        <p class="card-text">[[*{title}]]</p>
                     </div>
-                    <h5 class=" card-title mt-4">Body:</h5>
-                    <div class="card card-body border border-light bg-light text-dark mt-3">
+                    <h5 class=" card-title mt-4">Body</h5>
+                    <div class="card card-body text-dark mt-3">
                         <p class="card-text">[[*{body}]]</p>
+                    </div>
+                    <h5 class=" card-title mt-4">Operator</h5>
+                    <div class="card card-body text-dark mt-3">
+                        <p class="card-text">[[*{user.userName}]]</p>
+                    </div>
+                    <h5 class=" card-title mt-4">Status</h5>
+                    <div class="card card-body text-dark mt-3">
+                        <p class="card-text">[[*{ticketStatus.name}]]</p>
                     </div>
                     <div class="mt-5">
                         <a th:href="@{/tickets}" class="btn btn-danger">Go Back</a>

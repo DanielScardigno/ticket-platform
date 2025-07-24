@@ -41,6 +41,11 @@ public class Ticket {
     @JsonBackReference
     private User user;
 
+    @ManyToOne
+    @JoinColumn(name = "ticket_status_id", nullable = false)
+    @JsonBackReference
+    private TicketStatus ticketStatus;
+
     // Getters and Setters
 
     public Integer getId() {
@@ -71,12 +76,19 @@ public class Ticket {
         return this.creationDate;
     }
 
-    
     public User getUser() {
         return this.user;
     }
 
     public void setUser(User user) {
         this.user = user;
+    }
+
+    public TicketStatus getTicketStatus() {
+        return this.ticketStatus;
+    }
+
+    public void setTicketStatus(TicketStatus ticketStatus) {
+        this.ticketStatus = ticketStatus;
     }
 }
