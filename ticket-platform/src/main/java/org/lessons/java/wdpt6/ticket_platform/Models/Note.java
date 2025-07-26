@@ -1,7 +1,7 @@
 package org.lessons.java.wdpt6.ticket_platform.Models;
 
+
 import java.time.LocalDate;
-import java.util.List;
 
 import com.fasterxml.jackson.annotation.JsonBackReference;
 
@@ -12,44 +12,36 @@ import jakarta.persistence.Id;
 import jakarta.persistence.JoinColumn;
 import jakarta.persistence.Lob;
 import jakarta.persistence.ManyToOne;
-import jakarta.persistence.OneToMany;
 import jakarta.persistence.Table;
 import jakarta.validation.constraints.NotBlank;
-import jakarta.validation.constraints.NotNull;
 import jakarta.validation.constraints.Size;
 
-
 @Entity
-@Table(name = "tickets")
-public class Ticket {
+@Table(name = "notes")
+public class Note {
     
     @Id
     @GeneratedValue(strategy = GenerationType.IDENTITY)
     private Integer id;
 
-    @NotBlank(message = "Title cannot be empty or contain only spaces")
+    @NotBlank(message = "Author cannot be empty or contain only spaces")
+    @Size(max = 30, message = "Author cannot be longer than 30 characters")
+    private String author;
+
+    @NotBlank(message = "title cannot be empty or contain only spaces")
     @Size(max = 30, message = "Title cannot be longer than 30 characters")
     private String title;
 
     @Lob
-    @NotBlank(message = "Body cannot be empty or contain only spaces")
+    @NotBlank(message = "body cannot be empty or contain only spaces")
     private String body;
 
     private LocalDate creationDate = LocalDate.now();
 
     @ManyToOne
-    @JoinColumn(name = "user_id")
-    @NotNull(message = "You must select an operator")
+    @JoinColumn(name = "ticket_id", nullable = false)
     @JsonBackReference
-    private User user;
-
-    @ManyToOne
-    @JoinColumn(name = "ticket_status_id", nullable = false)
-    @JsonBackReference
-    private TicketStatus ticketStatus;
-
-    @OneToMany(mappedBy = "ticket")
-    private List<Note> notes;
+    private Ticket ticket;
 
     // Getters and Setters
 
@@ -59,6 +51,14 @@ public class Ticket {
 
     public void setId(Integer id) {
         this.id = id;
+    }
+
+    public String getAuthor() {
+        return this.author;
+    }
+
+    public void setAuthor(String author) {
+        this.author = author;
     }
 
     public String getTitle() {
@@ -81,27 +81,11 @@ public class Ticket {
         return this.creationDate;
     }
 
-    public User getUser() {
-        return this.user;
+    public Ticket getTicket() {
+        return this.ticket;
     }
 
-    public void setUser(User user) {
-        this.user = user;
-    }
-
-    public TicketStatus getTicketStatus() {
-        return this.ticketStatus;
-    }
-
-    public void setTicketStatus(TicketStatus ticketStatus) {
-        this.ticketStatus = ticketStatus;
-    }
-
-    public List<Note> getNotes() {
-        return this.notes;
-    }
-
-    public void setNotes(List<Note> notes) {
-        this.notes = notes;
+    public void setTicket(Ticket ticket) {
+        this.ticket = ticket;
     }
 }

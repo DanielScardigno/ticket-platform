@@ -1,0 +1,77 @@
+<!DOCTYPE html>
+<html lang="en" xmlns="https://www.thymeleaf.org">
+
+<head th:replace="~{fragments/head :: head('New Note')}"></head>
+
+<body class="bg-dark">
+    <header>
+        <nav th:replace="~{fragments/navBar :: navBar}"></nav>
+    </header>
+
+    <main>
+        <div class="container">
+
+            <!-- Title -->
+            <h1 class="text-light text-center mt-5"><i class="bi bi-ticket-fill"></i> New Note +</h1>
+            <!-- End Title -->
+
+            <!-- Form -->
+            <form class="col-12 col-md-8 col-lg-6 mx-auto" th:action="@{/notes/create}" method="post" th:object="${note}">
+                <input type="hidden" th:field="*{ticket.id}">
+
+                <!-- Note Author -->
+                <label class="form-label text-light mt-5 fs-3" for="author">Author</label>
+                <input class="form-control" type="text" id="author" th:field="*{author}" placeholder="Insert Full name"
+                    th:errorClass="is-invalid" required>
+
+                <!-- Error -->
+                <div th:if="${#fields.hasErrors('author')}" class="invalid-feedback fs-5">
+                    <ul>
+                        <li th:each="err : ${#fields.errors('author')}">[[${err}]]</li>
+                    </ul>
+                </div>
+                <!-- End Error -->
+                <!-- End Note Author -->   
+
+                <!-- Note Title -->
+                <label class="form-label text-light mt-5 fs-3" for="title">Title</label>
+                <input class="form-control" type="text" id="title" th:field="*{title}" placeholder="Insert Title"
+                    th:errorClass="is-invalid" required>
+
+                <!-- Error -->
+                <div th:if="${#fields.hasErrors('title')}" class="invalid-feedback fs-5">
+                    <ul>
+                        <li th:each="err : ${#fields.errors('title')}">[[${err}]]</li>
+                    </ul>
+                </div>
+                <!-- End Error -->
+                <!-- End Note Title -->   
+
+                <!-- Note Body -->
+                <label class="form-label text-light mt-5 fs-3" for="body">Body</label>
+                <textarea class="form-control" type="text" id="body" th:field="*{body}" rows="4"
+                    placeholder="Insert Body" th:errorClass="is-invalid" required></textarea>
+
+                <!-- Error -->
+                <div th:if="${#fields.hasErrors('body')}" class="invalid-feedback fs-5">
+                    <ul>
+                        <li th:each="err : ${#fields.errors('body')}">[[${err}]]</li>
+                    </ul>
+                </div>
+                <!-- End Error -->
+                <!-- End Note Body -->   
+
+                <div class="d-flex justify-content-between my-5">
+                    <a class="btn btn-danger" th:href="@{/tickets}">Cancel</a>
+                    <button class="btn btn-success" type="submit">Add Note +</button>
+                </div>
+
+            </form>
+            <!-- End Form -->
+    </main>
+
+    <!-- Popper -->
+    <script th:replace="~{fragments/popper :: popper}"></script>
+</body>
+
+</html>

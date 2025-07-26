@@ -3,6 +3,7 @@ package org.lessons.java.wdpt6.ticket_platform.controllers;
 import java.util.List;
 import java.util.Optional;
 
+import org.lessons.java.wdpt6.ticket_platform.Models.Note;
 import org.lessons.java.wdpt6.ticket_platform.Models.Ticket;
 import org.lessons.java.wdpt6.ticket_platform.Models.TicketStatus;
 import org.lessons.java.wdpt6.ticket_platform.repositories.TicketRepo;
@@ -131,5 +132,23 @@ public class TicketController {
 
         ticketRepo.delete(ticketToDelete);
         return "redirect:/tickets";
+    }
+
+    @GetMapping("/{id}/create")
+    public String addNote(Model model, @PathVariable Integer id) {
+        
+        Optional<Ticket> ticketOptional = ticketRepo.findById(id);
+
+        if (ticketOptional.isEmpty()) 
+            throw new ResponseStatusException(HttpStatus.NOT_FOUND, "There's no ticket with id: " + id);
+
+        model.addAttribute("ticket", ticketOptional.get());
+
+        Note newNote = new Note();
+        newNote.setTicket(ticketOptional.get());
+
+        model.addAttribute("note", newNote);
+
+        return "notes/create";
     }
 }
