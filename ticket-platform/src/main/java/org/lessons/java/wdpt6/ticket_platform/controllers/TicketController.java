@@ -6,6 +6,7 @@ import java.util.Optional;
 import org.lessons.java.wdpt6.ticket_platform.Models.Note;
 import org.lessons.java.wdpt6.ticket_platform.Models.Ticket;
 import org.lessons.java.wdpt6.ticket_platform.Models.TicketStatus;
+import org.lessons.java.wdpt6.ticket_platform.repositories.NoteRepo;
 import org.lessons.java.wdpt6.ticket_platform.repositories.TicketRepo;
 import org.lessons.java.wdpt6.ticket_platform.repositories.TicketStatusRepo;
 import org.lessons.java.wdpt6.ticket_platform.repositories.UserRepo;
@@ -37,6 +38,9 @@ public class TicketController {
 
     @Autowired
     TicketStatusRepo ticketStatusRepo;
+
+    @Autowired
+    NoteRepo noteRepo;
 
     @GetMapping
     public String index(Model model, @RequestParam(required = false) String keyword) {
@@ -129,6 +133,10 @@ public class TicketController {
     public String delete(Model model, @PathVariable Integer id) {
 
         Ticket ticketToDelete = ticketRepo.findById(id).get();
+
+        for (Note noteToDelete : ticketToDelete.getNotes()) {
+            noteRepo.delete(noteToDelete);
+        }
 
         ticketRepo.delete(ticketToDelete);
         return "redirect:/tickets";

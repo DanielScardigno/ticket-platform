@@ -35,7 +35,7 @@
                     <div class="card card-body text-dark mt-3">
                         <p class="card-text">[[*{ticketStatus.name}]]</p>
                     </div>
-                    <div class="mt-5">
+                    <div class="mt-5 d-flex justify-content-between">
                         <a th:href="@{/tickets}" class="btn btn-danger me-2">Go Back</a>
                         <a th:href="@{|/tickets/*{id}/create|}" class="btn btn-primary">Add a note +</a>
                     </div>
@@ -46,27 +46,61 @@
             <!-- Notes Section -->
             <div th:if="*{notes.size() > 0}">
 
-                <h2 class="text-light text-center mt-5">Notes</h2>
+                <h1 class="text-light text-center mt-5"><i class="bi bi-bookmark-fill"></i> Notes</h1>
 
-                <!-- Note Card -->
-                <div th:each="note : *{notes}" class="card my-5 mx-auto col-12 col-md-8 col-lg-6 text-bg-dark border-light">
-                    <div class="card-body">
-                        <span class="text-secondary mt-2">Creation Date: [[${note.creationDate}]]</span>
-                        <h5 class=" card-title mt-4">Author</h5>
-                        <div class="card card-body text-dark mt-3">
-                            <p class="card-text">[[${note.author}]]</p>
+                <div class="row gap-5 my-5 col-12 justify-content-center mx-auto">
+                    <!-- Note Card -->
+                    <div th:each="note : *{notes}" class="card col col-10 col-md-7 col-lg-4 text-bg-dark border-light">
+                        <div class="card-body">
+                            <span class="text-secondary mt-2">Creation Date: [[${note.creationDate}]]</span>
+                            <h5 class=" card-title mt-4">Author</h5>
+                            <div class="card card-body text-dark mt-3">
+                                <p class="card-text">[[${note.author}]]</p>
+                            </div>
+                            <h5 class=" card-title mt-4">Title</h5>
+                            <div class="card card-body text-dark mt-3">
+                                <p class="card-text">[[${note.title}]]</p>
+                            </div>
+                            <h5 class=" card-title mt-4">Body</h5>
+                            <div class="card card-body text-dark mt-3">
+                                <p class="card-text">[[${note.body}]]</p>
+                            </div>
                         </div>
-                        <h5 class=" card-title mt-4">Title</h5>
-                        <div class="card card-body text-dark mt-3">
-                            <p class="card-text">[[${note.title}]]</p>
+
+                        <div class="d-flex justify-content-end gap-2 mt-5 mb-3 mx-3 align-items-end">
+                            <a class="btn btn-primary" th:href="@{|/notes/${note.id}/edit|}"><i class="bi bi-pencil"></i></a>
+                            <button type="button" class="btn btn-danger" data-bs-toggle="modal" th:data-bs-target="'#delete-modal-' + ${note.id}">
+                                <i class="bi bi-trash"></i>
+                            </button>
+
+                            <!-- Modal -->
+                            <div class="modal fade" th:id="'delete-modal-' + ${note.id}" data-bs-backdrop="static" data-bs-theme="dark" data-bs-keyboard="false" tabindex="-1" aria-labelledby="staticBackdropLabel" aria-hidden="true">
+                                <div class="modal-dialog">
+                                    <div class="modal-content">
+                                        <div class="modal-header">
+                                            <h1 class="modal-title text-danger fs-5" id="staticBackdropLabel">
+                                                <i class="bi bi-trash-fill"></i> Delete Note
+                                            </h1>
+                                            <button type="button" class="btn-close" data-bs-dismiss="modal" aria-label="Close"></button>
+                                        </div>
+                                        <div class="modal-body me-auto">
+                                            Are you sure you want to delete Note: "[[${note.title}]]"?
+                                        </div>
+                                        <div class="modal-footer">
+                                            <button type="button" class="btn btn-light" data-bs-dismiss="modal">Cancel</button>
+                                            <form th:action="@{|/notes/${note.id}/delete|}" method="post">
+                                                <button type="submit" class="btn btn-danger">Delete</i></button>
+                                            </form>
+                                        </div>
+                                    </div>
+                                </div>
+                            </div>
+                            <!-- End Modal -->
                         </div>
-                        <h5 class=" card-title mt-4">Body</h5>
-                        <div class="card card-body text-dark mt-3">
-                            <p class="card-text">[[${note.body}]]</p>
-                        </div>
+
                     </div>
+                    <!-- End Note Card -->
                 </div>
-                <!-- End Note Card -->
 
             </div>
             <!-- End Notes Section -->
