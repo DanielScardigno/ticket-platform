@@ -11,8 +11,8 @@ import jakarta.persistence.Table;
 import jakarta.validation.constraints.NotBlank;
 
 @Entity
-@Table(name = "ticket_statuses")
-public class TicketStatus {
+@Table(name = "user_statuses")
+public class UserStatus {
     
     @Id
     @GeneratedValue(strategy = GenerationType.IDENTITY)
@@ -21,8 +21,8 @@ public class TicketStatus {
     @NotBlank
     private String name;
 
-    @OneToMany(mappedBy = "ticketStatus")
-    private List<Ticket> tickets;
+    @OneToMany(mappedBy = "userStatus")
+    private List<User> users;
 
     // Getters and Setters
 
@@ -42,11 +42,11 @@ public class TicketStatus {
         this.name = name;
     }
 
-    public List<Ticket> getTickets() {
-        return this.tickets;
+    public List<User> getUsers() {
+        return this.users;
     }
 
-    public void setTickets(List<Ticket> tickets) {
-        this.tickets = tickets;
+    public void setUsers(List<User> users) {
+        this.users = users;
     }
 }
