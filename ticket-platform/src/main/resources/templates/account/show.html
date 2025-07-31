@@ -1,7 +1,7 @@
 <!DOCTYPE html>
 <html lang="en" xmlns="https://www.thymeleaf.org">
 
-<head th:replace="~{fragments/head :: head('User Details')}"></head>
+<head th:replace="~{fragments/head :: head('Account')}"></head>
 
 <body class="bg-dark">
     <header>
@@ -12,14 +12,13 @@
         <div class="container">
 
             <!-- Title -->
-            <h1 class="text-light text-center mt-5"><i class="bi bi-person-lines-fill"></i> User Details</h1>
+            <h1 class="text-light text-center mt-5"><i class="bi bi-person-fill"></i> Account</h1>
             <!-- End Title -->
 
             <!-- User Card -->
-            <div class="mx-auto card my-5 col col-12 col-sm-10 col-md-8 col-lg-4 text-bg-dark border-light"
-                th:object="${user}">
+            <div class="mx-auto card my-5 col col-12 col-md-10 col-lg-6 text-bg-dark border-light" th:object="${user}">
                 <div class="card-body fw-medium">
-                    <h5 class=" card-title">Username</h5>
+                    <h5 class="card-title">UserName</h5>
                     <div class="card card-body text-dark mt-3">
                         <p class="card-text">[[*{userName}]]</p>
                     </div>
@@ -29,7 +28,7 @@
                     </div>
                     <h5 class="card-title mt-4">Roles</h5>
                     <div class="card card-body text-dark mt-3">
-                        <p th:each="role : *{roles}" class="card-text">[[${role.name}]] </p>
+                        <p th:each="role : *{roles}" class="card-text">[[${role.name}]]</p>
                     </div>
                     <h5 class="card-title mt-4">Status</h5>
                     <div class="card card-body text-dark mt-3">
@@ -38,11 +37,14 @@
                     <div th:if="*{tickets.size() > 0}">
                         <h5 class="card-title mt-4">Assigned Tickets</h5>
                         <div class="card card-body text-dark mt-3">                          
-                            <p th:each="ticket : *{tickets}" class="card-text">Title: [[${ticket.title}]]<br>Status: [[${ticket.ticketStatus.name}]]</p> 
+                            <p th:each="ticket : *{tickets}" class="card-text fw-medium">Title: [[${ticket.title}]]<br>Status: [[${ticket.ticketStatus.name}]]</p> 
                         </div>
                     </div>
 
-                    <a th:href="@{/users}" class="btn btn-danger mt-5">Go Back</a>
+                    <div class="d-flex justify-content-between">
+                        <a th:href="@{/users}" class="btn btn-danger mt-5">Go Back</a>
+                        <a th:href="@{|/account/*{id}/edit|}" class="btn btn-primary mt-5"><i class="bi bi-pencil"></i> Edit Account</a>
+                    </div>
 
                 </div>
             </div>

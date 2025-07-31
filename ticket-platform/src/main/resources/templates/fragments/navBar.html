@@ -18,8 +18,11 @@
                         <a class="nav-link" th:href="@{/users}"><i class="bi bi-people-fill"></i> Users</a>
                     </li>
                 </ul>
-                <div class="ms-auto">
-                    <a class="btn btn-sm btn-light fw-medium" th:href="@{/account}"><i class="bi bi-person-fill"></i> Account</a>
+                <div class="ms-auto me-2">
+                    <a class="btn btn-sm btn-light fw-medium" th:href="@{/account}"><i class="bi bi-person-fill"></i> <span sec:authentication="name"></span></a>
+                </div>
+                <div>
+                    <a class="btn btn-sm btn-primary fw-medium" th:href="@{/logout}"><i class="bi bi-door-open-fill"></i> Log Out</span></a>
                 </div>
             </div>
         </div>

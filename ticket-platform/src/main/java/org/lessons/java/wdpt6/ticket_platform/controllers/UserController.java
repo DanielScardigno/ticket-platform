@@ -4,8 +4,10 @@ import java.util.List;
 import java.util.Optional;
 
 import org.lessons.java.wdpt6.ticket_platform.Models.User;
+import org.lessons.java.wdpt6.ticket_platform.Models.UserStatus;
 import org.lessons.java.wdpt6.ticket_platform.repositories.RoleRepo;
 import org.lessons.java.wdpt6.ticket_platform.repositories.UserRepo;
+import org.lessons.java.wdpt6.ticket_platform.repositories.UserStatusRepo;
 import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.http.HttpStatus;
 import org.springframework.stereotype.Controller;
@@ -31,6 +33,9 @@ public class UserController {
 
     @Autowired
     RoleRepo roleRepo;
+
+    @Autowired 
+    UserStatusRepo userStatusRepo;
 
     @GetMapping
     public String index(Model model, @RequestParam(required = false) String keyword) {
@@ -75,10 +80,12 @@ public class UserController {
     public String store(Model model, @Valid @ModelAttribute(name = "user") User formUser, BindingResult bindingResult) {
 
         model.addAttribute("roles", roleRepo.findAll());
+        UserStatus defaultUserStatus = userStatusRepo.findByName("AVAILABLE");
 
         if (bindingResult.hasErrors()) {
             return "users/create";
         } else {
+            formUser.setUserStatus(defaultUserStatus);
             userRepo.save(formUser);
             return "redirect:/users";
         }

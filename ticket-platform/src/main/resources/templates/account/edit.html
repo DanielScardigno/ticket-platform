@@ -1,7 +1,7 @@
 <!DOCTYPE html>
 <html lang="en" xmlns="https://www.thymeleaf.org">
 
-<head th:replace="~{fragments/head :: head('Edit User')}"></head>
+<head th:replace="~{fragments/head :: head('Edit Account')}"></head>
 
 <body class="bg-dark">
     <header>
@@ -12,13 +12,11 @@
         <div class="container">
 
             <!-- Title -->
-            <h1 class="text-light text-center mt-5"><i class="bi bi-person-fill-gear"></i> Edit User</h1>
+            <h1 class="text-light text-center mt-5"><i class="bi bi-person-fill-gear"></i> Edit Account</h1>
             <!-- End Title -->
 
             <!-- Form -->
-            <form class="col-12 col-md-8 col-lg-6 mx-auto" th:action="@{|/users/*{id}/edit|}" method="post" th:object="${user}">
-
-                <input type="hidden" th:field="*{userStatus}">
+            <form class="col-12 col-md-8 col-lg-6 mx-auto" th:action="@{|/account/*{id}/edit|}" method="post" th:object="${user}">
 
                 <!-- Username -->
                 <label class="form-label text-light mt-5 fs-3" for="username">Username</label>
@@ -45,6 +43,13 @@
                 </div>
                 <!-- End Error -->
                 <!-- End Password -->
+
+                <!-- UserS tatus -->
+                <label class="form-label text-light mt-5 fs-3" for="status">Status</label>
+                <select class="form-select" id="status" th:field="*{userStatus}" th:errorClass="is-invalid">
+                    <option th:each="userStatus : ${userStatuses}" th:value="${userStatus.id}">[[${userStatus.name}]]</option>
+                </select>
+                <!-- End User Status -->
 
                 <!-- Roles -->
                 <div class="fs-3 mt-5 mb-2 text-light">Roles</div>

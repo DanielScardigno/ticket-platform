@@ -1,11 +1,13 @@
 package org.lessons.java.wdpt6.ticket_platform.controllers;
 
+import java.util.ArrayList;
 import java.util.List;
 import java.util.Optional;
 
 import org.lessons.java.wdpt6.ticket_platform.Models.Note;
 import org.lessons.java.wdpt6.ticket_platform.Models.Ticket;
 import org.lessons.java.wdpt6.ticket_platform.Models.TicketStatus;
+import org.lessons.java.wdpt6.ticket_platform.Models.User;
 import org.lessons.java.wdpt6.ticket_platform.repositories.NoteRepo;
 import org.lessons.java.wdpt6.ticket_platform.repositories.TicketRepo;
 import org.lessons.java.wdpt6.ticket_platform.repositories.TicketStatusRepo;
@@ -76,10 +78,17 @@ public class TicketController {
     @GetMapping("/create")
     public String create(Model model) {
     
-        model.addAttribute("users", userRepo.findByRolesName("OPERATOR"));
+        List<User> users = new ArrayList<User>();
 
+        for (User user : userRepo.findByRolesName("OPERATOR")) {
+
+            if (user.getUserStatus().getName().equals("AVAILABLE")) {
+                users.add(user);
+            }
+        }
+
+        model.addAttribute("users", users);
         model.addAttribute("ticket", new Ticket());
-
         return "tickets/create";
     }
     
