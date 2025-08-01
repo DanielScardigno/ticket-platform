@@ -91,14 +91,37 @@ public class AccountController {
     @PostMapping("/{id}/edit")
     public String update(Model model, @Valid @ModelAttribute(name = "user") User formUser, BindingResult bindingResult) {
 
-        model.addAttribute("userStatuses", userStatusRepo.findAll());
+        User user = userRepo.findById(formUser.getId()).get();
+
+        List<Ticket> userTickets = user.getTickets();
+
+        Boolean isTicketUncompleted = false;
+
+        for (Ticket userTicket : userTickets) {
+            if (userTicket.getTicketStatus().getName().equals("TO DO") || userTicket.getTicketStatus().getName().equals("IN PROGRESS")) {
+                isTicketUncompleted = true;
+                break;
+            }
+        }
+
+        List<UserStatus> userStatuses = new ArrayList<UserStatus>();
+
+        if (isTicketUncompleted == true) {
+            userStatuses.add(userStatusRepo.findByName("AVAILABLE"));
+        } else {
+            for (UserStatus userStatus : userStatusRepo.findAll()) {
+                userStatuses.add(userStatus);
+            }
+        }
+
+        model.addAttribute("userStatuses", userStatuses);
         model.addAttribute("roles", roleRepo.findAll());
 
         if (bindingResult.hasErrors()) {
             return "account/edit";
         } else {
             userRepo.save(formUser);
-            return "redirect:/users";
+            return "redirect:/tickets";
         }
     }
 }

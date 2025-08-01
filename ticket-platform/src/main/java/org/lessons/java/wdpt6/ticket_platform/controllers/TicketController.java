@@ -81,7 +81,6 @@ public class TicketController {
         List<User> users = new ArrayList<User>();
 
         for (User user : userRepo.findByRolesName("OPERATOR")) {
-
             if (user.getUserStatus().getName().equals("AVAILABLE")) {
                 users.add(user);
             }
@@ -95,7 +94,14 @@ public class TicketController {
     @PostMapping("/create")
     public String store(Model model, @Valid @ModelAttribute("ticket") Ticket formTicket, BindingResult bindingResult) {
 
-        model.addAttribute("users", userRepo.findByRolesName("OPERATOR"));
+        List<User> users = new ArrayList<User>();
+
+        for (User user : userRepo.findByRolesName("OPERATOR")) {
+            if (user.getUserStatus().getName().equals("AVAILABLE")) {
+                users.add(user);
+            }
+        }
+        model.addAttribute("users", users);
 
         TicketStatus defaulTicketStatus = ticketStatusRepo.findByName("TO DO");
     
@@ -111,10 +117,31 @@ public class TicketController {
     @GetMapping("/{id}/edit")
     public String edit(Model model, @PathVariable Integer id) {
 
-        model.addAttribute("users", userRepo.findByRolesName("OPERATOR"));
-        model.addAttribute("ticketStatuses", ticketStatusRepo.findAll());
+        List<User> users = new ArrayList<User>();
+
+        for (User user : userRepo.findByRolesName("OPERATOR")) {
+            if (user.getUserStatus().getName().equals("AVAILABLE")) {
+                users.add(user);
+            }
+        }
+        model.addAttribute("users", users);
+
 
         Optional<Ticket> ticketOptional = ticketRepo.findById(id);
+
+        User assignedOperator = ticketOptional.get().getUser();
+
+        List<TicketStatus> ticketStatuses = new ArrayList<TicketStatus>();
+
+        if (assignedOperator.getUserStatus().getName().equals("AVAILABLE")) {
+            for (TicketStatus ticketStatus : ticketStatusRepo.findAll()) {
+                ticketStatuses.add(ticketStatus);
+            }
+        } else {
+            ticketStatuses.add(ticketStatusRepo.findByName("COMPLETED"));
+        }
+        model.addAttribute("ticketStatuses", ticketStatuses);
+
         
         if (ticketOptional.isPresent()) {
             model.addAttribute("ticket", ticketOptional.get());   
@@ -127,8 +154,30 @@ public class TicketController {
     @PostMapping("/{id}/edit")
     public String update(Model model, @Valid @ModelAttribute("ticket") Ticket formTicket, BindingResult bindingResult) {
 
-        model.addAttribute("users", userRepo.findByRolesName("OPERATOR"));
-        model.addAttribute("ticketStatuses", ticketStatusRepo.findAll());
+        List<User> users = new ArrayList<User>();
+
+        for (User user : userRepo.findByRolesName("OPERATOR")) {
+            if (user.getUserStatus().getName().equals("AVAILABLE")) {
+                users.add(user);
+            }
+        }
+        model.addAttribute("users", users);
+
+        Ticket ticket = ticketRepo.findById(formTicket.getId()).get();
+
+        User assignedOperator = ticket.getUser();
+
+        List<TicketStatus> ticketStatuses = new ArrayList<TicketStatus>();
+
+        if (assignedOperator.getUserStatus().getName().equals("AVAILABLE")) {
+            for (TicketStatus ticketStatus : ticketStatusRepo.findAll()) {
+                ticketStatuses.add(ticketStatus);
+            }
+        } else {
+            ticketStatuses.add(ticketStatusRepo.findByName("COMPLETED"));
+        }
+
+        model.addAttribute("ticketStatuses", ticketStatuses);
         
         if (bindingResult.hasErrors()) {
             return "tickets/edit";

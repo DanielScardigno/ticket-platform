@@ -62,7 +62,7 @@
                 <!-- End Note Body -->   
 
                 <div class="d-flex justify-content-between my-5">
-                    <a class="btn btn-danger" th:href="@{/tickets}">Cancel</a>
+                    <a class="btn btn-danger" th:href="@{|/tickets/*{ticket.id}|}">Cancel</a>
                     <button class="btn btn-success" type="submit">Add Note +</button>
                 </div>
 
