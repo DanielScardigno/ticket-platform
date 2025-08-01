@@ -30,8 +30,8 @@
                     <div class="card card-body text-dark mt-3">
                         <p th:each="role : *{roles}" class="card-text">[[${role.name}]]</p>
                     </div>
-                    <h5 class="card-title mt-4">Status</h5>
-                    <div class="card card-body text-dark mt-3">
+                    <h5 class="card-title mt-4" sec:authorize="hasAuthority('OPERATOR') or hasAuthority('OPERATOR') and hasAuthority('ADMIN')">Status</h5>
+                    <div class="card card-body text-dark mt-3" sec:authorize="hasAuthority('OPERATOR') or hasAuthority('OPERATOR') and hasAuthority('ADMIN')">
                         <p class="card-text">[[*{userStatus.name}]] </p>
                     </div>
                     <div th:if="*{tickets.size() > 0}">

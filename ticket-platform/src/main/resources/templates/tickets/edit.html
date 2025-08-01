@@ -22,6 +22,8 @@
                 <label class="form-label text-light mt-5 fs-3" for="title" sec:authorize="hasAuthority('ADMIN')">Title</label>
                 <input class="form-control" type="text" id="title" th:field="*{title}" placeholder="Insert Title" th:errorClass="is-invalid" required sec:authorize="hasAuthority('ADMIN')">
 
+                <input type="hidden" th:field="*{title}" sec:authorize="hasAuthority('OPERATOR')"/>
+
                 <!-- Error -->
                 <div th:if="${#fields.hasErrors('title')}" class="invalid-feedback fs-5" sec:authorize="hasAuthority('ADMIN')">
                     <ul>
@@ -34,6 +36,8 @@
                 <!-- Ticket Body -->
                 <label class="form-label text-light mt-5 fs-3" for="body" sec:authorize="hasAuthority('ADMIN')">Body</label>
                 <textarea class="form-control" type="text" id="body" th:field="*{body}" rows="4" placeholder="Insert Body" th:errorClass="is-invalid" required sec:authorize="hasAuthority('ADMIN')"></textarea>
+
+                <input type="hidden" th:field="*{body}" sec:authorize="hasAuthority('OPERATOR')"/>
 
                 <!-- Error -->
                 <div th:if="${#fields.hasErrors('body')}" class="invalid-feedback fs-5" sec:authorize="hasAuthority('ADMIN')">
@@ -50,6 +54,8 @@
                     <option value="" >Select an Operator</option>
                     <option th:each="user : ${users}" th:value="${user.id}">[[${user.userName}]]</option>
                 </select>
+
+                <input type="hidden" th:field="*{user}" sec:authorize="hasAuthority('OPERATOR')"/>
 
                 <!-- Error -->
                 <div th:if="${#fields.hasErrors('user')}" class="invalid-feedback fs-5" sec:authorize="hasAuthority('ADMIN')">

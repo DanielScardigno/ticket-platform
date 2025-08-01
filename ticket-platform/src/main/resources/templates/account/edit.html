@@ -44,21 +44,23 @@
                 <!-- End Error -->
                 <!-- End Password -->
 
-                <!-- UserS tatus -->
-                <label class="form-label text-light mt-5 fs-3" for="status">Status</label>
-                <select class="form-select" id="status" th:field="*{userStatus}" th:errorClass="is-invalid">
+                <!-- User Status -->
+                <label class="form-label text-light mt-5 fs-3" for="status" sec:authorize="hasAuthority('OPERATOR') or hasAuthority('OPERATOR') and hasAuthority('ADMIN')">Status</label>
+                <select class="form-select" id="status" th:field="*{userStatus}" th:errorClass="is-invalid" sec:authorize="hasAuthority('OPERATOR') or hasAuthority('OPERATOR') and hasAuthority('ADMIN')">
                     <option th:each="userStatus : ${userStatuses}" th:value="${userStatus.id}">[[${userStatus.name}]]</option>
                 </select>
+
+                <input type="hidden" th:field="*{userStatus}" sec:authorize="hasAuthority('ADMIN')"/>
                 <!-- End User Status -->
 
                 <!-- Roles -->
                 <div class="fs-3 mt-5 mb-2 text-light" sec:authorize="hasAuthority('ADMIN')">Roles</div>
-
+                
                 <div sec:authorize="hasAuthority('ADMIN')">
                     <div th:each="role : ${roles}" class="me-3">
                         <input class="form-check-input" type="checkbox" id="'role-' + ${role.id}" th:field="*{roles}" th:value="${role.id}" th:errorClass="is-invalid">
                         <label class="form-label text-light" for="'role-' + ${role.id}">[[${role.name}]]</label>
-
+                        
                         <!-- Error -->
                         <div th:if="${#fields.hasErrors('roles')}" class="invalid-feedback fs-5">
                             <ul>
@@ -68,6 +70,7 @@
                         <!-- End Error -->
                     </div>
                 </div>
+                <input type="hidden" th:field="*{roles}" sec:authorize="hasAuthority('OPERATOR')">
                 <!-- End Roles -->
                 
                 <div class="d-flex justify-content-between my-5">
