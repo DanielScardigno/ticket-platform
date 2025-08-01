@@ -20,13 +20,13 @@
                 <div class="row justify-content-between">
 
                     <!-- Add Ticket -->
-                    <div class="col-12 col-md-7 mb-3">
+                    <div class="col-12 col-md-7" sec:authorize="hasAuthority('ADMIN')">
                         <a th:href="@{tickets/create}" class="btn btn-light">Add Ticket +</a>
                     </div>
                     <!-- End Add Ticket -->
 
                     <!-- Search Ticket -->
-                    <form th:action="@{/tickets}" method="get" class="col-12 col-md-5 col-lg-4">
+                    <form th:action="@{/tickets}" method="get" class="col-12 col-md-5 col-lg-4 mb-3">
                         <div class="input-group">
                             <input type="search" name="keyword" id="ticket-search-input" class="form-control"
                                 th:value="${keyword}" placeholder="Search">
@@ -64,7 +64,7 @@
 
                                     <!-- Delete Ticket -->
                                     <button type="button" class="btn btn-sm btn-danger" data-bs-toggle="modal"
-                                        th:data-bs-target="'#delete-modal-' + *{id}">
+                                        th:data-bs-target="'#delete-modal-' + *{id}" sec:authorize="hasAuthority('ADMIN')">
                                         <i class="bi bi-trash"></i>
                                     </button>
 

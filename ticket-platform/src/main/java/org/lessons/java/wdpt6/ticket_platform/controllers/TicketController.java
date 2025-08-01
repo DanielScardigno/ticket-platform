@@ -5,6 +5,7 @@ import java.util.List;
 import java.util.Optional;
 
 import org.lessons.java.wdpt6.ticket_platform.Models.Note;
+import org.lessons.java.wdpt6.ticket_platform.Models.Role;
 import org.lessons.java.wdpt6.ticket_platform.Models.Ticket;
 import org.lessons.java.wdpt6.ticket_platform.Models.TicketStatus;
 import org.lessons.java.wdpt6.ticket_platform.Models.User;
@@ -12,8 +13,10 @@ import org.lessons.java.wdpt6.ticket_platform.repositories.NoteRepo;
 import org.lessons.java.wdpt6.ticket_platform.repositories.TicketRepo;
 import org.lessons.java.wdpt6.ticket_platform.repositories.TicketStatusRepo;
 import org.lessons.java.wdpt6.ticket_platform.repositories.UserRepo;
+import org.lessons.java.wdpt6.ticket_platform.security.DatabaseUserDetails;
 import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.http.HttpStatus;
+import org.springframework.security.core.annotation.AuthenticationPrincipal;
 import org.springframework.stereotype.Controller;
 import org.springframework.ui.Model;
 import org.springframework.validation.BindingResult;
@@ -25,13 +28,12 @@ import org.springframework.web.bind.annotation.RequestMapping;
 import org.springframework.web.bind.annotation.RequestParam;
 import org.springframework.web.server.ResponseStatusException;
 
-
 import jakarta.validation.Valid;
 
 @Controller
 @RequestMapping("/tickets")
 public class TicketController {
-    
+
     @Autowired
     TicketRepo ticketRepo;
 
@@ -45,30 +47,52 @@ public class TicketController {
     NoteRepo noteRepo;
 
     @GetMapping
-    public String index(Model model, @RequestParam(required = false) String keyword) {
+    public String index(Model model, @RequestParam(required = false) String keyword,
+            @AuthenticationPrincipal DatabaseUserDetails databaseUserDetails) {
 
-        List<Ticket> tickets;
+        User user = userRepo.findById(databaseUserDetails.getId()).get();
 
-        if (keyword == null || keyword.isEmpty()) {
-            tickets = ticketRepo.findAll();
-        } else {
-            tickets = ticketRepo.findByTitleContainingIgnoreCase(keyword);
+        List<Role> userRoles = user.getRoles();
+
+        List<Ticket> tickets = new ArrayList<Ticket>();
+
+        for (Role userRole : userRoles) {
+            if (userRole.getName().equals("ADMIN")) {
+                if (keyword == null || keyword.isEmpty()) {
+                    tickets = ticketRepo.findAll();
+                } else {
+                    tickets = ticketRepo.findByTitleContainingIgnoreCase(keyword);
+                }
+            } else {
+                if (keyword == null || keyword.isEmpty()) {
+                    for (Ticket ticket : ticketRepo.findAll()) {
+                        if (ticket.getUser().getId().equals(user.getId())) {
+                            tickets.add(ticket);
+                        }
+                    }
+                } else {
+                    for (Ticket ticket : ticketRepo.findByTitleContainingIgnoreCase(keyword)) {
+                        if (ticket.getUser().getId().equals(user.getId())) {
+                            tickets.add(ticket);
+                        }
+                    }
+                }
+            }
         }
-        
+
         model.addAttribute("tickets", tickets);
         model.addAttribute("keyword", keyword);
 
         return "tickets/index";
     }
 
-    
     @GetMapping("/{id}")
     public String view(Model model, @PathVariable Integer id) {
-        
+
         Optional<Ticket> ticketOptional = ticketRepo.findById(id);
-        
+
         if (ticketOptional.isPresent()) {
-            model.addAttribute("ticket", ticketOptional.get());   
+            model.addAttribute("ticket", ticketOptional.get());
             return "tickets/show";
         } else {
             throw new ResponseStatusException(HttpStatus.NOT_FOUND, "There's no ticket with id: " + id);
@@ -77,7 +101,7 @@ public class TicketController {
 
     @GetMapping("/create")
     public String create(Model model) {
-    
+
         List<User> users = new ArrayList<User>();
 
         for (User user : userRepo.findByRolesName("OPERATOR")) {
@@ -90,7 +114,7 @@ public class TicketController {
         model.addAttribute("ticket", new Ticket());
         return "tickets/create";
     }
-    
+
     @PostMapping("/create")
     public String store(Model model, @Valid @ModelAttribute("ticket") Ticket formTicket, BindingResult bindingResult) {
 
@@ -104,7 +128,7 @@ public class TicketController {
         model.addAttribute("users", users);
 
         TicketStatus defaulTicketStatus = ticketStatusRepo.findByName("TO DO");
-    
+
         if (bindingResult.hasErrors()) {
             return "tickets/create";
         } else {
@@ -126,7 +150,6 @@ public class TicketController {
         }
         model.addAttribute("users", users);
 
-
         Optional<Ticket> ticketOptional = ticketRepo.findById(id);
 
         User assignedOperator = ticketOptional.get().getUser();
@@ -142,9 +165,8 @@ public class TicketController {
         }
         model.addAttribute("ticketStatuses", ticketStatuses);
 
-        
         if (ticketOptional.isPresent()) {
-            model.addAttribute("ticket", ticketOptional.get());   
+            model.addAttribute("ticket", ticketOptional.get());
             return "tickets/edit";
         } else {
             throw new ResponseStatusException(HttpStatus.NOT_FOUND, "There's no ticket with id: " + id);
@@ -178,7 +200,7 @@ public class TicketController {
         }
 
         model.addAttribute("ticketStatuses", ticketStatuses);
-        
+
         if (bindingResult.hasErrors()) {
             return "tickets/edit";
         } else {
@@ -202,10 +224,10 @@ public class TicketController {
 
     @GetMapping("/{id}/create")
     public String addNote(Model model, @PathVariable Integer id) {
-        
+
         Optional<Ticket> ticketOptional = ticketRepo.findById(id);
 
-        if (ticketOptional.isEmpty()) 
+        if (ticketOptional.isEmpty())
             throw new ResponseStatusException(HttpStatus.NOT_FOUND, "There's no ticket with id: " + id);
 
         model.addAttribute("ticket", ticketOptional.get());

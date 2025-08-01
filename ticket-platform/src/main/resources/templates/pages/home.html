@@ -16,7 +16,7 @@
                 <div class="col-12 d-flex justify-content-center">
                     <a class="btn btn-lg btn-light mt-3 fw-medium" th:href="@{/tickets}">Go to Tickets</a>
                 </div>
-                <div class="col-12 d-flex justify-content-center">
+                <div class="col-12 d-flex justify-content-center" sec:authorize="hasAuthority('ADMIN')">
                     <a class="btn btn-lg btn-light mt-3 fw-medium" th:href="@{/users}">Go to Users</a>
                 </div>
             </div>

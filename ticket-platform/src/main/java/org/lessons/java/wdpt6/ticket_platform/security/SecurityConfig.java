@@ -17,8 +17,10 @@ public class SecurityConfig {
     SecurityFilterChain filterChain(HttpSecurity http) throws Exception {
 
         http.authorizeHttpRequests(requests -> requests
-            .requestMatchers("/**").hasAnyAuthority("ADMIN", "OPERATOR"))
-            .formLogin(Customizer.withDefaults())
+            .requestMatchers("/tickets/create", "/tickets/*/delete").hasAuthority("ADMIN")
+            .requestMatchers("/users/**").hasAuthority("ADMIN")
+            .requestMatchers("/**").hasAnyAuthority("OPERATOR", "ADMIN"))
+            .formLogin(Customizer.withDefaults())   
             .cors(cors -> cors.disable())
             .csrf(csrf -> csrf.disable());
         return http.build();

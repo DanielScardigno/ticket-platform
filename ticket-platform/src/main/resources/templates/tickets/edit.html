@@ -19,11 +19,11 @@
             <form class="col-12 col-md-8 col-lg-6 mx-auto" th:action="@{|/tickets/*{id}/edit|}" method="post" th:object="${ticket}">
 
                 <!-- Ticket Title -->
-                <label class="form-label text-light mt-5 fs-3" for="title">Title</label>
-                <input class="form-control" type="text" id="title" th:field="*{title}" placeholder="Insert Title" th:errorClass="is-invalid" required>
+                <label class="form-label text-light mt-5 fs-3" for="title" sec:authorize="hasAuthority('ADMIN')">Title</label>
+                <input class="form-control" type="text" id="title" th:field="*{title}" placeholder="Insert Title" th:errorClass="is-invalid" required sec:authorize="hasAuthority('ADMIN')">
 
                 <!-- Error -->
-                <div th:if="${#fields.hasErrors('title')}" class="invalid-feedback fs-5">
+                <div th:if="${#fields.hasErrors('title')}" class="invalid-feedback fs-5" sec:authorize="hasAuthority('ADMIN')">
                     <ul>
                         <li th:each="err : ${#fields.errors('title')}">[[${err}]]</li>
                     </ul>
@@ -32,11 +32,11 @@
                 <!-- End Ticket Title -->
 
                 <!-- Ticket Body -->
-                <label class="form-label text-light mt-5 fs-3" for="body">Body</label>
-                <textarea class="form-control" type="text" id="body" th:field="*{body}" rows="4" placeholder="Insert Body" th:errorClass="is-invalid" required></textarea>
+                <label class="form-label text-light mt-5 fs-3" for="body" sec:authorize="hasAuthority('ADMIN')">Body</label>
+                <textarea class="form-control" type="text" id="body" th:field="*{body}" rows="4" placeholder="Insert Body" th:errorClass="is-invalid" required sec:authorize="hasAuthority('ADMIN')"></textarea>
 
                 <!-- Error -->
-                <div th:if="${#fields.hasErrors('body')}" class="invalid-feedback fs-5">
+                <div th:if="${#fields.hasErrors('body')}" class="invalid-feedback fs-5" sec:authorize="hasAuthority('ADMIN')">
                     <ul>
                         <li th:each="err : ${#fields.errors('body')}">[[${err}]]</li>
                     </ul>
@@ -45,14 +45,14 @@
                 <!-- End Ticket body -->
 
                 <!-- Operator -->
-                <label class="form-label text-light mt-5 fs-3" for="operator">Operator</label>
-                <select class="form-select" id="operator" th:field="*{user}" th:errorClass="is-invalid">
+                <label class="form-label text-light mt-5 fs-3" for="operator" sec:authorize="hasAuthority('ADMIN')">Operator</label>
+                <select class="form-select" id="operator" th:field="*{user}" th:errorClass="is-invalid" sec:authorize="hasAuthority('ADMIN')">
                     <option value="" >Select an Operator</option>
                     <option th:each="user : ${users}" th:value="${user.id}">[[${user.userName}]]</option>
                 </select>
 
                 <!-- Error -->
-                <div th:if="${#fields.hasErrors('user')}" class="invalid-feedback fs-5">
+                <div th:if="${#fields.hasErrors('user')}" class="invalid-feedback fs-5" sec:authorize="hasAuthority('ADMIN')">
                     <ul>
                         <li th:each="err : ${#fields.errors('user')}">[[${err}]]</li>
                     </ul>
