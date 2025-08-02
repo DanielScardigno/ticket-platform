@@ -11,6 +11,7 @@ import org.lessons.java.wdpt6.ticket_platform.Models.TicketStatus;
 import org.lessons.java.wdpt6.ticket_platform.Models.User;
 import org.lessons.java.wdpt6.ticket_platform.repositories.CategoryRepo;
 import org.lessons.java.wdpt6.ticket_platform.repositories.NoteRepo;
+import org.lessons.java.wdpt6.ticket_platform.repositories.RoleRepo;
 import org.lessons.java.wdpt6.ticket_platform.repositories.TicketRepo;
 import org.lessons.java.wdpt6.ticket_platform.repositories.TicketStatusRepo;
 import org.lessons.java.wdpt6.ticket_platform.repositories.UserRepo;
@@ -49,6 +50,9 @@ public class TicketController {
 
     @Autowired
     CategoryRepo categoryRepo;
+
+    @Autowired
+    RoleRepo roleRepo;
 
     @GetMapping
     public String index(Model model, @RequestParam(required = false) String keyword,
@@ -91,9 +95,16 @@ public class TicketController {
     }
 
     @GetMapping("/{id}")
-    public String view(Model model, @PathVariable Integer id) {
+    public String view(Model model, @PathVariable Integer id, @AuthenticationPrincipal DatabaseUserDetails databaseUserDetails) {
 
         Optional<Ticket> ticketOptional = ticketRepo.findById(id);
+
+        User user = userRepo.findById(databaseUserDetails.getId()).get();
+        List<Role> userRoles = user.getRoles();
+
+        if (!ticketOptional.get().getUser().getId().equals(databaseUserDetails.getId()) && !userRoles.contains(roleRepo.findByName("ADMIN"))) {
+            throw new ResponseStatusException(HttpStatus.FORBIDDEN, "You're not allowed to perform this action");
+        }
 
         if (ticketOptional.isPresent()) {
             model.addAttribute("ticket", ticketOptional.get());
@@ -145,7 +156,7 @@ public class TicketController {
     }
 
     @GetMapping("/{id}/edit")
-    public String edit(Model model, @PathVariable Integer id) {
+    public String edit(Model model, @PathVariable Integer id, @AuthenticationPrincipal DatabaseUserDetails databaseUserDetails) {
 
         List<User> users = new ArrayList<User>();
 
@@ -157,6 +168,13 @@ public class TicketController {
         model.addAttribute("users", users);
 
         Optional<Ticket> ticketOptional = ticketRepo.findById(id);
+
+        User user = userRepo.findById(databaseUserDetails.getId()).get();
+        List<Role> userRoles = user.getRoles();
+
+        if (!ticketOptional.get().getUser().getId().equals(databaseUserDetails.getId()) && !userRoles.contains(roleRepo.findByName("ADMIN"))) {
+            throw new ResponseStatusException(HttpStatus.FORBIDDEN, "You're not allowed to perform this action");
+        }
 
         User assignedOperator = ticketOptional.get().getUser();
 

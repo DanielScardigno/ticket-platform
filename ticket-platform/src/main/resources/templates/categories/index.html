@@ -20,13 +20,13 @@
                 <div class="row justify-content-between">
 
                     <!-- Add Category -->
-                    <div class="col-12 col-md-7 mb-2">
+                    <div class="col-12 col-md-7 col-lg-6 mb-2">
                         <a th:href="@{categories/create}" class="btn btn-light fw-medium">Add Category +</a>
                     </div>
                     <!-- End Add Category -->
 
                     <!-- Search Category -->
-                    <form th:action="@{/categories}" method="get" class="col-12 col-md-5 col-lg-4 mb-3">
+                    <form th:action="@{/categories}" method="get" class="col-12 col-md-5 col-lg-6 mb-3">
                         <div class="input-group">
                             <input type="search" name="keyword" id="category-search-input" class="form-control fw-medium"
                                 th:value="${keyword}" placeholder="Search">

@@ -1,11 +1,18 @@
 package org.lessons.java.wdpt6.ticket_platform.controllers;
 
+import java.util.List;
 import java.util.Optional;
 
 import org.lessons.java.wdpt6.ticket_platform.Models.Note;
+import org.lessons.java.wdpt6.ticket_platform.Models.Role;
+import org.lessons.java.wdpt6.ticket_platform.Models.User;
 import org.lessons.java.wdpt6.ticket_platform.repositories.NoteRepo;
+import org.lessons.java.wdpt6.ticket_platform.repositories.RoleRepo;
+import org.lessons.java.wdpt6.ticket_platform.repositories.UserRepo;
+import org.lessons.java.wdpt6.ticket_platform.security.DatabaseUserDetails;
 import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.http.HttpStatus;
+import org.springframework.security.core.annotation.AuthenticationPrincipal;
 import org.springframework.stereotype.Controller;
 import org.springframework.ui.Model;
 import org.springframework.validation.BindingResult;
@@ -24,6 +31,12 @@ public class NoteController {
 
     @Autowired
     NoteRepo noteRepo;
+
+    @Autowired
+    UserRepo userRepo;
+
+    @Autowired
+    RoleRepo roleRepo;
     
     @PostMapping("/create")
     public String store(Model model, @Valid @ModelAttribute(name = "note") Note formNote, BindingResult bindingResult) {
@@ -39,9 +52,16 @@ public class NoteController {
     }
 
     @GetMapping("/{id}/edit")
-    public String edit(Model model, @PathVariable Integer id) {
+    public String edit(Model model, @PathVariable Integer id, @AuthenticationPrincipal DatabaseUserDetails databaseUserDetails) {
 
         Optional<Note> noteOptional = noteRepo.findById(id);
+
+        User user = userRepo.findById(databaseUserDetails.getId()).get();
+        List<Role> userRoles = user.getRoles();
+
+        if (!noteOptional.get().getTicket().getUser().getId().equals(databaseUserDetails.getId()) && !userRoles.contains(roleRepo.findByName("ADMIN"))) {
+            throw new ResponseStatusException(HttpStatus.FORBIDDEN, "You're not allowed to perform this action");
+        }
 
         if (noteOptional.isEmpty()) 
             throw new ResponseStatusException(HttpStatus.NOT_FOUND, "There's no note with id: " + id);
