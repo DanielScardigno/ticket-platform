@@ -15,18 +15,18 @@
             <h1 class="text-light text-center mt-5"><i class="bi bi-people-fill"></i> Users</h1>
             <!-- End Title -->
 
-            <div class="col-12 col-sm-10 col-lg-8 mt-5 mx-auto">
+            <div class="col-12 col-sm-10 col-md-8 col-lg-6 mt-5 mx-auto">
 
                 <div class="row justify-content-between">
 
                     <!-- Add User -->
-                    <div class="col-12 col-md-7 mb-3">
+                    <div class="col-12 col-md-7 col-lg-6 mb-3">
                         <a th:href="@{users/create}" class="btn btn-light fw-medium">Add User +</a>
                     </div>
                     <!-- End Add User -->
 
                     <!-- Search User -->
-                    <form th:action="@{/users}" method="get" class="col-12 col-md-5 col-lg-4">
+                    <form th:action="@{/users}" method="get" class="col-12 col-md-5 col-lg-5">
                         <div class="input-group">
                             <input type="search" name="keyword" id="user-search-input" class="form-control fw-medium"
                                 th:value="${keyword}" placeholder="Search">

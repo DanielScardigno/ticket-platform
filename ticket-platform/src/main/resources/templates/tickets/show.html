@@ -18,9 +18,9 @@
             <!-- Ticket Card -->
             <div class="card my-5 mx-auto col-12 col-md-8 col-lg-6 text-bg-dark border-light">
                 <div class="card-body fw-medium">
-                    <div class="d-flex justify-content-between">
-                        <p><a class="btn btn-sm btn-light fw-medium" th:href="@{|/categories/*{category.id}|}">[[*{category.name}]]</a></p>
-                        <p class="text-secondary">Creation Date: [[*{creationDate}]]</p>
+                    <div class="row">
+                        <p class="col col-12 col-sm-6"><a class="btn btn-sm btn-light fw-medium" th:href="@{|/categories/*{category.id}|}">[[*{category.name}]]</a></p>
+                        <p class="text-secondary col col-12 col-sm-6 text-sm-end">Creation Date: [[*{creationDate}]]</p>
                     </div>
                     <h5 class=" card-title mt-4">Title</h5>
                     <div class="card card-body text-dark mt-3">
