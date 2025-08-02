@@ -15,6 +15,9 @@
                         <a class="nav-link" th:href="@{/tickets}"><i class="bi bi-ticket-fill"></i> Tickets</a>
                     </li>
                     <li class="nav-item" sec:authorize="hasAuthority('ADMIN')">
+                        <a class="nav-link" th:href="@{/categories}"><i class="bi bi-tags-fill"></i> Categories</a>
+                    </li>
+                    <li class="nav-item" sec:authorize="hasAuthority('ADMIN')">
                         <a class="nav-link" th:href="@{/users}"><i class="bi bi-people-fill"></i> Users</a>
                     </li>
                 </ul>

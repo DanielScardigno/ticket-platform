@@ -1,0 +1,44 @@
+<!DOCTYPE html>
+<html lang="en" xmlns="https://www.thymeleaf.org">
+
+<head th:replace="~{fragments/head :: head('Category Details')}"></head>
+
+<body class="bg-dark">
+    <header>
+        <nav th:replace="~{fragments/navBar :: navBar}"></nav>
+    </header>
+
+    <main>
+        <div class="container">
+
+            <!-- Title -->
+            <h1 class="text-light text-center mt-5"><i class="bi bi-tags-fill"></i> Category Details</h1>
+            <!-- End Title -->
+
+            <!-- Category Card -->
+            <div class="mx-auto card my-5 col col-12 col-sm-10 col-md-8 col-lg-4 text-bg-dark border-light"
+                th:object="${category}">
+                <div class="card-body fw-medium">
+                    <h5 class=" card-title">Name</h5>
+                    <div class="card card-body text-dark mt-3">
+                        <p class="card-text">[[*{name}]]</p>
+                    </div>
+                    <h5 class="card-title mt-4">Description</h5>
+                    <div class="card card-body text-dark mt-3">
+                        <p class="card-text">[[*{description}]]</p>
+                    </div>
+
+                    <a th:href="@{/tickets}" class="btn btn-danger mt-5">Go Back</a>
+
+                </div>
+            </div>
+            <!-- End User Card -->
+
+        </div>
+    </main>
+
+    <!-- Popper -->
+    <script th:replace="~{fragments/popper :: popper}"></script>
+</body>
+
+</html>

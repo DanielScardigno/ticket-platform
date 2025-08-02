@@ -59,7 +59,7 @@ public class AccountController {
         User user = userOptional.get();
 
         if (!id.equals(databaseUserDetails.getId()))
-            throw new SecurityException("You're not authorized to perform this action");
+            throw new ResponseStatusException(HttpStatus.FORBIDDEN, "You're not allowed to perform this action");
 
         List<Ticket> userTickets = user.getTickets();
 

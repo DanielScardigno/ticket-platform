@@ -48,6 +48,12 @@ public class Ticket {
     @JsonBackReference
     private TicketStatus ticketStatus;
 
+    @ManyToOne
+    @JoinColumn(name = "category_id")
+    @NotNull(message = "You must select a category")
+    @JsonBackReference
+    private Category category;
+
     @OneToMany(mappedBy = "ticket")
     private List<Note> notes;
 
@@ -95,6 +101,14 @@ public class Ticket {
 
     public void setTicketStatus(TicketStatus ticketStatus) {
         this.ticketStatus = ticketStatus;
+    }
+
+    public Category getCategory() {
+        return this.category;
+    }
+
+    public void setCategory(Category category) {
+        this.category = category;
     }
 
     public List<Note> getNotes() {

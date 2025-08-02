@@ -9,6 +9,7 @@ import org.lessons.java.wdpt6.ticket_platform.Models.Role;
 import org.lessons.java.wdpt6.ticket_platform.Models.Ticket;
 import org.lessons.java.wdpt6.ticket_platform.Models.TicketStatus;
 import org.lessons.java.wdpt6.ticket_platform.Models.User;
+import org.lessons.java.wdpt6.ticket_platform.repositories.CategoryRepo;
 import org.lessons.java.wdpt6.ticket_platform.repositories.NoteRepo;
 import org.lessons.java.wdpt6.ticket_platform.repositories.TicketRepo;
 import org.lessons.java.wdpt6.ticket_platform.repositories.TicketStatusRepo;
@@ -45,6 +46,9 @@ public class TicketController {
 
     @Autowired
     NoteRepo noteRepo;
+
+    @Autowired
+    CategoryRepo categoryRepo;
 
     @GetMapping
     public String index(Model model, @RequestParam(required = false) String keyword,
@@ -112,6 +116,7 @@ public class TicketController {
 
         model.addAttribute("users", users);
         model.addAttribute("ticket", new Ticket());
+        model.addAttribute("categories", categoryRepo.findAll());
         return "tickets/create";
     }
 
@@ -130,6 +135,7 @@ public class TicketController {
         TicketStatus defaulTicketStatus = ticketStatusRepo.findByName("TO DO");
 
         if (bindingResult.hasErrors()) {
+            model.addAttribute("categories", categoryRepo.findAll());
             return "tickets/create";
         } else {
             formTicket.setTicketStatus(defaulTicketStatus);
@@ -167,6 +173,7 @@ public class TicketController {
 
         if (ticketOptional.isPresent()) {
             model.addAttribute("ticket", ticketOptional.get());
+            model.addAttribute("categories", categoryRepo.findAll());
             return "tickets/edit";
         } else {
             throw new ResponseStatusException(HttpStatus.NOT_FOUND, "There's no ticket with id: " + id);
@@ -200,6 +207,7 @@ public class TicketController {
         }
 
         model.addAttribute("ticketStatuses", ticketStatuses);
+        model.addAttribute("categories", categoryRepo.findAll());
 
         if (bindingResult.hasErrors()) {
             return "tickets/edit";

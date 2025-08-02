@@ -18,6 +18,7 @@ public class SecurityConfig {
 
         http.authorizeHttpRequests(requests -> requests
             .requestMatchers("/tickets/create", "/tickets/*/delete").hasAuthority("ADMIN")
+            .requestMatchers("/categories", "/categories/create", "/categories/*/edit", "/categories/*/delete").hasAuthority("ADMIN")
             .requestMatchers("/users/**").hasAuthority("ADMIN")
             .requestMatchers("/**").hasAnyAuthority("OPERATOR", "ADMIN"))
             .formLogin(Customizer.withDefaults())   

@@ -18,6 +18,22 @@
             <!-- Form -->
             <form class="col-12 col-md-8 col-lg-6 mx-auto" th:action="@{/tickets/create}" method="post" th:object="${ticket}">
 
+                <!-- Category -->
+                <label class="form-label text-light mt-5 fs-3" for="category">Category</label>
+                <select class="form-select" id="category" th:field="*{category}" th:errorClass="is-invalid">
+                    <option value="" >Select a Category</option>
+                    <option th:each="category : ${categories}" th:value="${category.id}">[[${category.name}]]</option>
+                </select>
+
+                <!-- Error -->
+                <div th:if="${#fields.hasErrors('category')}" class="invalid-feedback fs-5">
+                    <ul>
+                        <li th:each="err : ${#fields.errors('category')}">[[${err}]]</li>
+                    </ul>
+                </div>
+                <!-- End Error -->
+                <!-- End Category -->
+
                 <!-- Ticket Title -->
                 <label class="form-label text-light mt-5 fs-3" for="title">Title</label>
                 <input class="form-control" type="text" id="title" th:field="*{title}" placeholder="Insert Title"

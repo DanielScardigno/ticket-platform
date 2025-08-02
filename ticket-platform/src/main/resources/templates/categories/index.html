@@ -1,7 +1,7 @@
 <!DOCTYPE html>
 <html lang="en" xmlns="https://www.thymeleaf.org">
 
-<head th:replace="~{fragments/head :: head(Tickets)}"></head>
+<head th:replace="~{fragments/head :: head(Categories)}"></head>
 
 <body class="bg-dark">
     <header>
@@ -12,71 +12,60 @@
         <div class="container">
 
             <!-- Title -->
-            <h1 class="text-light text-center mt-5"><i class="bi bi-ticket-fill"></i> Tickets</h1>
+            <h1 class="text-light text-center mt-5"><i class="bi bi-tags-fill"></i> Categories</h1>
             <!-- End Title -->
 
-            <div class="col-12 col-sm-10 col-lg-8 mt-5 mx-auto">
+            <div class="col-12 col-sm-10 col-md-8 col-lg-5 mt-5 mx-auto">
 
                 <div class="row justify-content-between">
 
-                    <!-- Add Ticket -->
-                    <div class="col-12 col-md-7 mb-2" sec:authorize="hasAuthority('ADMIN')">
-                        <a th:href="@{tickets/create}" class="btn btn-light fw-medium">Add Ticket +</a>
+                    <!-- Add Category -->
+                    <div class="col-12 col-md-7 mb-2">
+                        <a th:href="@{categories/create}" class="btn btn-light fw-medium">Add Category +</a>
                     </div>
-                    <!-- End Add Ticket -->
+                    <!-- End Add Category -->
 
-                    <!-- Search Ticket -->
-                    <form th:action="@{/tickets}" method="get" class="col-12 col-md-5 col-lg-4 mb-3">
+                    <!-- Search Category -->
+                    <form th:action="@{/categories}" method="get" class="col-12 col-md-5 col-lg-4 mb-3">
                         <div class="input-group">
-                            <input type="search" name="keyword" id="ticket-search-input" class="form-control fw-medium"
+                            <input type="search" name="keyword" id="category-search-input" class="form-control fw-medium"
                                 th:value="${keyword}" placeholder="Search">
                             <button class="btn btn-light" type="submit"><i class="bi bi-search"></i></button>
                         </div>
                     </form>
-                    <!-- End Search Ticket -->
+                    <!-- End Search Category -->
                 </div>
 
-                <!-- Tickets Table -->
-                <table class="table table-dark mb-5" th:if="${tickets.size() > 0}">
+                <!-- Categories Table -->
+                <table class="table table-dark mb-5" th:if="${categories.size() > 0}">
                     <thead>
                         <tr>
-                            <th>Title</th>
-                            <th>
-                                <span class="d-none d-sm-block">Category</span>
-                            </th>
-                            <th>
-                                <span class="d-none d-md-block">Creation Date</span>
-                            </th>
-                            <th>Status</th>
+                            <th>Name</th>
                             <th class="text-end">Actions</th>
                         </tr>
                     </thead>
                     <tbody>
-                        <tr th:each="ticket : ${tickets}" th:object="${ticket}">
-                            <td>[[*{title}]]</td>
-                            <td>
-                                <span class="d-none d-sm-block">[[*{category.name}]]</span>
-                            </td>
-                            <td>
-                                <span class="d-none d-md-block">[[*{creationDate}]]</span>
-                            </td>
-                            <td>[[*{ticketStatus.name}]]</td>
+                        <tr th:each="category : ${categories}" th:object="${category}">
+                            <td>[[*{name}]]</td>
                             <td>
                                 <div class="d-flex gap-1 justify-content-end">
 
-                                    <!-- Ticket Details -->
-                                    <a th:href="@{|/tickets/*{id}|}" class="btn btn-sm btn-light"><i
+                                    <!-- Category Details -->
+                                    <a th:href="@{|/categories/*{id}|}" class="btn btn-sm btn-light"><i
                                             class="bi bi-eye-fill"></i></a>
 
-                                    <!-- Edit Ticket -->
-                                    <a th:href="@{|/tickets/*{id}/edit|}" class="btn btn-sm btn-primary"><i
+                                    <!-- Edit Category -->
+                                    <a th:href="@{|/categories/*{id}/edit|}" class="btn btn-sm btn-primary"><i
                                             class="bi bi-pencil"></i></a>
 
-                                    <!-- Delete Ticket -->
+                                    <!-- Delete Category -->
                                     <button type="button" class="btn btn-sm btn-danger" data-bs-toggle="modal"
-                                        th:data-bs-target="'#delete-modal-' + *{id}" sec:authorize="hasAuthority('ADMIN')">
+                                        th:data-bs-target="'#delete-modal-' + *{id}" th:if="*{getTickets().isEmpty()}">
                                         <i class="bi bi-trash"></i>
                                     </button>
+
+                                    <a href="#" class="btn btn-sm btn-danger disabled"
+                                        th:unless="*{getTickets().isEmpty()}"><i class="bi bi-trash"></i></a>
 
                                     <!-- Modal -->
                                     <div class="modal fade" th:id="'delete-modal-' + *{id}" data-bs-backdrop="static"
@@ -86,17 +75,18 @@
                                             <div class="modal-content">
                                                 <div class="modal-header">
                                                     <h1 class="modal-title text-danger fs-5" id="staticBackdropLabel">
-                                                        <i class="bi bi-trash-fill"></i> Delete Ticket</h1>
+                                                        <i class="bi bi-trash-fill"></i> Delete Category
+                                                    </h1>
                                                     <button type="button" class="btn-close" data-bs-dismiss="modal"
                                                         aria-label="Close"></button>
                                                 </div>
                                                 <div class="modal-body me-auto">
-                                                    Are you sure you want to delete ticket: "[[*{title}]]"?
+                                                    Are you sure you want to delete Category: "[[*{name}]]"?
                                                 </div>
                                                 <div class="modal-footer">
                                                     <button type="button" class="btn btn-light"
                                                         data-bs-dismiss="modal">Cancel</button>
-                                                    <form th:action="@{|/tickets/*{id}/delete|}" method="post">
+                                                    <form th:action="@{|/categories/*{id}/delete|}" method="post">
                                                         <button type="submit" class="btn btn-danger">Delete</i></button>
                                                     </form>
                                                 </div>
@@ -110,16 +100,16 @@
                         </tr>
                     </tbody>
                 </table>
-                <!-- End Tickets Table -->
+                <!-- End Categories Table -->
 
             </div>
 
-            <!-- No Tickets Text -->
-            <div class="text-danger text-center my-5 " th:unless="${tickets.size() > 0}">
-                <h2>Oops, there's no tickets here</h2>
+            <!-- No Categories Text -->
+            <div class="text-danger text-center my-5 " th:unless="${categories.size() > 0}">
+                <h2>Oops, there's no categories here</h2>
                 <h2>>:(</h2>
             </div>
-            <!-- End No Tickets Text -->
+            <!-- End No Categories Text -->
 
         </div>
     </main>
