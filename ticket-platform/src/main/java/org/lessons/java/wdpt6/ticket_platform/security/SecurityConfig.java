@@ -20,7 +20,8 @@ public class SecurityConfig {
             .requestMatchers("/tickets/create", "/tickets/*/delete").hasAuthority("ADMIN")
             .requestMatchers("/categories", "/categories/create", "/categories/*/edit", "/categories/*/delete").hasAuthority("ADMIN")
             .requestMatchers("/users/**").hasAuthority("ADMIN")
-            .requestMatchers("/**").hasAnyAuthority("OPERATOR", "ADMIN"))
+            .requestMatchers("/**").hasAnyAuthority("OPERATOR", "ADMIN")
+            .requestMatchers("/api/tickets").permitAll())
             .formLogin(Customizer.withDefaults())   
             .cors(cors -> cors.disable())
             .csrf(csrf -> csrf.disable());
