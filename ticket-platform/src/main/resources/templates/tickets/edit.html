@@ -85,10 +85,12 @@
                 <!-- End Operator -->
 
                 <!-- Ticket Status -->
-                <label class="form-label text-light mt-5 fs-3" for="ticket-status">Status</label>
-                <select class="form-select" id="ticket-status" th:field="*{ticketStatus}" th:errorClass="is-invalid">
+                <label class="form-label text-light mt-5 fs-3" for="ticket-status" sec:authorize="hasAuthority('OPERATOR') or hasAuthority('OPERATOR') and hasAuthority('ADMIN')">Status</label>
+                <select class="form-select" id="ticket-status" th:field="*{ticketStatus}" th:errorClass="is-invalid" sec:authorize="hasAuthority('OPERATOR') or hasAuthority('OPERATOR') and hasAuthority('ADMIN')">
                     <option th:each="ticketStatus : ${ticketStatuses}" th:value="${ticketStatus.id}">[[${ticketStatus.name}]]</option>
                 </select>
+
+                <input type="hidden" th:field="*{ticketStatus}" sec:authorize="hasAuthority('ADMIN')"/>
                 <!-- End Ticket Status -->
 
                 <div class="d-flex justify-content-between my-5">

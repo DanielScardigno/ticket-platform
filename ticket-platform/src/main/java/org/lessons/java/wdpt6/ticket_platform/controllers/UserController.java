@@ -3,9 +3,11 @@ package org.lessons.java.wdpt6.ticket_platform.controllers;
 import java.util.List;
 import java.util.Optional;
 
+import org.lessons.java.wdpt6.ticket_platform.Models.Ticket;
 import org.lessons.java.wdpt6.ticket_platform.Models.User;
 import org.lessons.java.wdpt6.ticket_platform.Models.UserStatus;
 import org.lessons.java.wdpt6.ticket_platform.repositories.RoleRepo;
+import org.lessons.java.wdpt6.ticket_platform.repositories.TicketRepo;
 import org.lessons.java.wdpt6.ticket_platform.repositories.UserRepo;
 import org.lessons.java.wdpt6.ticket_platform.repositories.UserStatusRepo;
 import org.springframework.beans.factory.annotation.Autowired;
@@ -36,6 +38,9 @@ public class UserController {
 
     @Autowired 
     UserStatusRepo userStatusRepo;
+
+    @Autowired
+    TicketRepo ticketRepo;
 
     @GetMapping
     public String index(Model model, @RequestParam(required = false) String keyword) {
@@ -123,6 +128,10 @@ public class UserController {
     public String delete(Model model, @PathVariable Integer id) {
 
         User userToDelete = userRepo.findById(id).get();
+
+        for (Ticket userTicket : userToDelete.getTickets()) {
+            ticketRepo.delete(userTicket);
+        }
 
         userRepo.delete(userToDelete);
         return "redirect:/users";
